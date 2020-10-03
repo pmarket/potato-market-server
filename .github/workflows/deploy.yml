@@ -1,0 +1,65 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - develop
+env:
+  PROJECT_NAME: potato-backend
+  BUCKET_NAME: potato-codedeploy-bucket
+  BUCKET_REGION: ap-northeast-2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Make deploy/month-app/build/libs/
+        run: mkdir -p deploy/
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: potato-backend-ecr
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\r\nTAG=$IMAGE_TAG" > deploy/.env
+
+      - name: Copy deploy script into deploy/
+        run: cp appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
+
+      - name: Zip deploy/
+        run: zip -r deploy.zip deploy
+
+      - name: Upload to S3
+        run: aws s3 cp deploy.zip s3://${BUCKET_NAME}/${PROJECT_NAME}-${GITHUB_SHA}.zip --region ${BUCKET_REGION}
+
+      - name: Code Deploy
+        env:
+          CODE_DEPLOY_APP: potato-code-deploy
+          CODE_DEPLOY_GROUP: dev
+        run: aws deploy create-deployment --application-name ${CODE_DEPLOY_APP} --deployment-group-name ${CODE_DEPLOY_GROUP} --s3-location bucket=${BUCKET_NAME},bundleType=zip,key=${PROJECT_NAME}-${GITHUB_SHA}.zip
