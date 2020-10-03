@@ -1,0 +1,6 @@
+version: '3'
+services:
+  dev:
+    image: 788906588229.dkr.ecr.ap-northeast-2.amazonaws.com/potato-backend-ecr:latest
+    ports:
+      - 8000:8000

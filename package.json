@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "express": "^4.17.1",
-    "mongoose": "^5.10.6"
+    "express": "^4.17.1"
   }
 }
