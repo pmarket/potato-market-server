@@ -5,6 +5,6 @@ files:
     destination: /home/ubuntu/build
 hooks:
   ApplicationStart:
-    - location: /run.sh
+    - location: run.sh
       runas: ubuntu
       timeout: 60
