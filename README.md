@@ -12,7 +12,7 @@
 
 `yarn start`
 
-### yarn start local"
+### Run local"
 
 `yarn start:local`
 
