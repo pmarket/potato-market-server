@@ -1,6 +1,6 @@
 version: '3'
 services:
   dev:
-    build: .
+    image: ${IMAGE}:${TAG}
     ports:
       - 8000:8000
