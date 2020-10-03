@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - feature/deploy
 env:
   PROJECT_NAME: potato-backend
   BUCKET_NAME: potato-codedeploy-bucket
