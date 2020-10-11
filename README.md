@@ -1,5 +1,7 @@
 # 감자마켓 백엔드
 
+> Node.js로 만드는 중고 거래 API 서버
+
 ### Docker-compose로 로컬에서 컨테이너 띄우는 방법
 
 ```
@@ -23,7 +25,7 @@ b1f169b10c8f        788906588229.dkr.ecr.ap-northeast-2.amazonaws.com/potato-bac
 
 `yarn start`
 
-### Run local"
+### Run local
 
 `yarn start:local`
 
