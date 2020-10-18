@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx babel src --out-dir dist",
-    "start": "node dist/app.js",
+    "start": "node dist/bin/www.js",
     "start:local": "nodemon --exec babel-node src/bin/www.js"
   },
   "keywords": [],

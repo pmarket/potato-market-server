@@ -47,7 +47,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-          echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\nTAG=$IMAGE_TAG" > deploy/.env
+          echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\nTAG=$IMAGE_TAG" > deploy/compose.env
 
       - name: Copy deploy script into deploy/
         run: cp appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
