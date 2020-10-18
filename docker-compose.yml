@@ -1,7 +1,6 @@
 version: '3'
 services:
   dev:
-    image: ${IMAGE}:${TAG}
+    build: .
     ports:
-      - 127.0.0.1:8000:8000
-    network_mode: host
+      - 8000:8000

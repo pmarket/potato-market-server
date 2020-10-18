@@ -1,8 +1,6 @@
 version: '3'
 services:
   dev:
-    env_file: .env.dev
     image: ${IMAGE}:${TAG}
     ports:
-      - 127.0.0.1:8001:8000
-    network_mode: host
+      - 8001:8000
