@@ -13,6 +13,19 @@ CONTAINER ID        IMAGE                                                       
 b1f169b10c8f        788906588229.dkr.ecr.ap-northeast-2.amazonaws.com/potato-backend-ecr:latest   "yarn start"        15 seconds ago      Up 15 seconds       0.0.0.0:8000->8000/tcp   potato-backend_dev_1
 ```
 
+### 환경설정 파일 (로컬)
+
+.env.local
+
+```
+PORT=8000
+DB_DATABASE=...
+DB_USERNAME=...
+DB_PASSWORD=...
+DB_HOST=localhost
+DB_PORT=3306
+```
+
 ### Install
 
 `yarn install`
