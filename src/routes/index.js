@@ -1,9 +1,8 @@
 import express from 'express';
+import memberRouter from './member/memberRouter';
 
 const router = express.Router();
 
-router.get('/ping', (req, res) => {
-  res.status(200).end('pong');
-});
+router.use('/', memberRouter);
 
 export default router;
