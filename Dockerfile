@@ -7,4 +7,4 @@ RUN yarn install
 
 RUN yarn run build
 
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "start:test"]
