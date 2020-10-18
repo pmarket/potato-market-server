@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/docker-mysql
 env:
   PROJECT_NAME: potato-backend
   BUCKET_NAME: potato-codedeploy-bucket
@@ -29,6 +30,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Make .env.test
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_PORT: 8000
+          envkey_DB_DATABASE: ${{secrets.TEST_DB_NAME}}
+          envkey_DB_USERNAME: ${{secrets.TEST_DB_USERNAME}}
+          envkey_DB_PASSWORD: ${{secrets.TEST_DB_PASSWORD}}
+          envkey_DB_HOST: ${{secrets.TEST_DB_HOST}}
+          envkey_DB_PORT: ${{secrets.TEST_DB_PORT}}
+          file_name: .env.test
+
       - name: Make deploy/month-app/build/libs/
         run: mkdir -p deploy/
 
@@ -50,7 +62,7 @@ jobs:
           echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\nTAG=$IMAGE_TAG" > deploy/.env
 
       - name: Copy deploy script into deploy/
-        run: cp appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
+        run: cp .env.dev appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
 
       - name: Zip deploy/
         run: zip -r deploy.zip deploy

@@ -7,6 +7,7 @@
     "build": "npx babel src --out-dir dist",
     "start": "NODE_ENV=dev nodemon --exec babel-node src/bin/www.js",
     "start:local": "NODE_ENV=dev node dist/bin/www.js",
+    "start:test": "NODE_ENV=test node dist/bin/www.js",
     "start:prod": "NODE_ENV=prod node dist/bin/www.js"
   },
   "keywords": [],
