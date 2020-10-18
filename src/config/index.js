@@ -15,7 +15,6 @@ const config = {
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST || '127.0.0.1',
       port: process.env.DB_PORT,
-      logging: true,
       pool: {
         max: 5,
         min: 0,
