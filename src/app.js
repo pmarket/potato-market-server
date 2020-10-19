@@ -26,7 +26,12 @@ class Server {
 
     this.express.use('/api/v1', router);
 
-    // TODO: Error Handler
+    // TODO: Error Handler (모듈화 시키기)
+    this.express.use((err, req, res, next) => {
+      return res.status(err.code || 500).json({
+        message: err.message,
+      });
+    });
   }
 
   get express() {
