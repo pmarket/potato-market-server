@@ -5,6 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import router from './routes';
+import { logger } from './config/winston';
 
 class Server {
   constructor() {
@@ -28,8 +29,9 @@ class Server {
 
     // TODO: Error Handler (모듈화 시키기)
     this.express.use((err, req, res, next) => {
+      logger.error(err.message);
       return res.status(err.code || 500).json({
-        message: err.message,
+        message: err.userMessage,
       });
     });
   }

@@ -6,3 +6,5 @@ dist/
 .env.local
 .env.test
 .env.prod
+
+logs/**
