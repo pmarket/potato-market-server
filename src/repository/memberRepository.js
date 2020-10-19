@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import Member from '../model/member';
 
-export const getMemberByEmail = async (email) => {
+export const findMemberByEmail = async (email) => {
   return Member.findOne({
     where: {
       email: { [Op.eq]: email },

@@ -25,6 +25,8 @@ class Server {
     });
 
     this.express.use('/api/v1', router);
+
+    // TODO: Error Handler
   }
 
   get express() {
@@ -32,4 +34,6 @@ class Server {
   }
 }
 
-export default new Server().express;
+const server = new Server();
+
+export default server.express;

@@ -5,7 +5,7 @@ import config from '../config';
 
 class Database {
   constructor() {
-    this._sequelize = new Sequelize(config.database.local);
+    this._sequelize = new Sequelize(config.database);
     this._models = {};
 
     const models = Object.assign(
