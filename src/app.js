@@ -5,7 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import router from './routes';
-import { logger } from './config/winston';
+import { handleCustomException } from './middleware/exceptionHandler';
 
 class Server {
   constructor() {
@@ -27,13 +27,8 @@ class Server {
 
     this.express.use('/api/v1', router);
 
-    // TODO: Error Handler (모듈화 시키기)
-    this.express.use((err, req, res, next) => {
-      logger.error(err.message);
-      return res.status(err.code || 500).json({
-        message: err.userMessage,
-      });
-    });
+    // Exception Handler
+    this.express.use(handleCustomException);
   }
 
   get express() {

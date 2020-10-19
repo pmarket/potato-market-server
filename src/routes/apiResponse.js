@@ -1,7 +1,7 @@
 export class ApiResponse {
-  constructor(data) {
-    this.code;
-    this.message;
+  constructor(data, code = null, message = null) {
+    this.code = code;
+    this.message = message;
     this.data = data;
   }
 }

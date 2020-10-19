@@ -1,11 +1,8 @@
 import * as memberRepository from '../../repository/memberRepository';
+import * as memberServiceUtils from './memberServiceUtils';
 
 export const signUpMember = async (email, name, profileUrl) => {
-  const findMember = await memberRepository.findMemberByEmail(email);
-  if (findMember != null) {
-    // TODO: Custom Error
-    throw new Error('Already Exists Member');
-  }
+  await memberServiceUtils.validateNotExistMember(memberRepository, email);
   await memberRepository.saveMember({
     email: email,
     name: name,
