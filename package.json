@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "npx babel src --out-dir dist",
-    "start": "node dist/index.js",
-    "start:local": "nodemon --exec babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=local nodemon --exec babel-node src/bin/www.js",
+    "start:local": "NODE_ENV=local node dist/bin/www.js"
   },
   "keywords": [],
   "author": "",
@@ -22,10 +21,18 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "nodemon": "^2.0.4",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "express": "^4.17.1"
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0"
   }
 }
