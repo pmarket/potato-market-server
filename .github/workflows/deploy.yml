@@ -29,8 +29,9 @@ jobs:
 
       - name: create deploy/
         run: |
-          mkdir -p deploy/
+          mkdir -p deploy/nginx
           cp appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
+          cp nginx/* deploy/nginx
 
       - name: Login to Amazon ECR
         id: login-ecr
