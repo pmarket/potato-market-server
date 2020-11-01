@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - develop
-env:
-  BUCKET_NAME: potato-codedeploy-bucket
-  BUCKET_REGION: ap-northeast-2
 
 jobs:
   build:
@@ -47,32 +44,27 @@ jobs:
 
           echo -e "IMAGE=$DOCKER_REGISTRY/$DOCKER_REPOSITORY\nTAG=$IMAGE_TAG" > deploy/.env
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+      - name: zip deploy.zip
+        run: zip -r deploy.zip deploy
 
-      - name: deploy.zip to s3
-        run: |
-          zip -r deploy.zip deploy
-          aws s3 cp deploy.zip s3://${BUCKET_NAME}/${PROJECT_NAME}-${GITHUB_SHA}.zip --region ${BUCKET_REGION}
+      - name: Upload deploy.zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: deploy.zip
+          path: deploy.zip
 
   deploy:
     needs:
       - build
     runs-on: potato-server
     steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Download deploy.zip
+        uses: actions/download-artifact@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          name: deploy.zip
 
       - name: run server
         run: |
-          aws s3 cp s3://${BUCKET_NAME}/${PROJECT_NAME}-${GITHUB_SHA}.zip --region ${BUCKET_REGION} deploy.zip
           unzip -o ./deploy.zip
-          cd deploy/ && sh ./run.sh
+          cd deploy/
+          sh ./run.sh
