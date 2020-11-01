@@ -24,7 +24,7 @@ jobs:
       - name: create deploy/
         run: |
           mkdir -p deploy/nginx
-          cp appspec.yml docker-compose.*yml ./scripts/run.sh deploy/
+          cp docker-compose.blue.yml docker-compose.green.yml ./scripts/run.sh deploy/
           cp nginx/* deploy/nginx
 
       - name: Login to GitHub Container Registry
