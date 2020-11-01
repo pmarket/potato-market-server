@@ -1,11 +1,12 @@
-name: Backend Server De
+name: Backend Server Deploys
 
 on:
   push:
     branches:
       - develop
+      - feature/deploy
 env:
-  PROJECT_NAME: potato-backend
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build:
@@ -41,22 +42,33 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: potato-backend-ecr
-          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-          echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\nTAG=$IMAGE_TAG" > deploy/.env
+  deploy:
+    needs:
+      - build
+    runs-on: potato-server
+    name: deploy server
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
-      - name: deploy
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: run server
         env:
-          BUCKET_NAME: potato-codedeploy-bucket
-          BUCKET_REGION: ap-northeast-2
-          CODE_DEPLOY_APP: potato-code-deploy
-          CODE_DEPLOY_GROUP: dev
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: potato-backend-ecr
         run: |
-          zip -r deploy.zip deploy
-          aws s3 cp deploy.zip s3://${BUCKET_NAME}/${PROJECT_NAME}-${GITHUB_SHA}.zip --region ${BUCKET_REGION}
-          aws deploy create-deployment --application-name ${CODE_DEPLOY_APP} --deployment-group-name ${CODE_DEPLOY_GROUP} --s3-location bucket=${BUCKET_NAME},bundleType=zip,key=${PROJECT_NAME}-${GITHUB_SHA}.zip
+          echo -e "IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY\nTAG=$IMAGE_TAG" > .env
+          sudo sh ./run.sh
