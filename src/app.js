@@ -5,6 +5,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
+import router from './routes';
+
 class Server {
   constructor() {
     this._express = express();
@@ -22,6 +24,7 @@ class Server {
     this.express.get('/ping', (req, res) => {
       res.status(200).end('pong');
     });
+    this.express.use('', router);
   }
 
   get express() {
