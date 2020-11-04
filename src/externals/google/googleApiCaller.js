@@ -1,11 +1,16 @@
 import axios from 'axios';
 import config from '../../config';
+import { ExternalApiException } from '../../exception/customException';
 
 const getGoogleUserProfile = async (code) => {
-  const accessToken = await getGoogleAccessToken(code);
-  return await axios.get(
-    `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken.data.access_token}`
-  );
+  try {
+    const accessToken = await getGoogleAccessToken(code);
+    return await axios.get(
+      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken.data.access_token}`
+    );
+  } catch (error) {
+    throw new ExternalApiException('구글과 연동 중 에러가 발생하였습니다');
+  }
 };
 
 const getGoogleAccessToken = async (code) => {

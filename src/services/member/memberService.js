@@ -9,6 +9,5 @@ export const signUpMember = async (email, name, profileUrl) => {
     name: name,
     profileUrl: profileUrl,
   });
-  const token = jwtUtils.createToken(newMember.dataValues.id);
-  return token;
+  return jwtUtils.createToken(newMember.dataValues.id);
 };
