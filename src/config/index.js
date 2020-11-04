@@ -24,6 +24,12 @@ const config = {
       idle: 10000,
     },
   },
+  google: {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    grant_type: process.env.GOOGLE_GRANT_TYPE,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+  },
 };
 
 export default config;
