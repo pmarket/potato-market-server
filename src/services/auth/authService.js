@@ -1,5 +1,6 @@
 import * as memberRepository from '../../repository/memberRepository';
 import getGoogleUserProfile from '../../externals/google/googleApiCaller';
+import * as jwtUtils from '../../utils/jwt';
 
 export const googleAuthService = async (code) => {
   try {
@@ -19,13 +20,14 @@ export const googleAuthService = async (code) => {
         token: null,
       };
     }
+    const token = jwtUtils.createToken(findMember.dataValues.id);
     // 로그인을 위한 토큰 생성후 반환
     return {
       type: 'LOGIN',
       email: null,
       name: null,
       profileUrl: null,
-      token: 'something',
+      token: token,
     };
   } catch (err) {
     console.log(err);

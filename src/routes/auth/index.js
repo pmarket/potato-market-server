@@ -1,11 +1,8 @@
 import express from 'express';
-import { googleAuthService } from '../../services/auth/authService';
+import { googleAuthController } from './authController';
+
 const router = express.Router();
 
-router.get('/api/v1/auth/google', async (req, res) => {
-  const code = req.query.code;
-  const response = await googleAuthService(code);
-  res.status(200).send(response);
-});
+router.get('/api/v1/auth/google', googleAuthController);
 
 export default router;
