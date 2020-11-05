@@ -9,6 +9,14 @@ export const findMemberByEmail = async (email) => {
   });
 };
 
+export const findMemberById = async (id) => {
+  return Member.findOne({
+    where: {
+      id: { [Op.eq]: id },
+    },
+  });
+};
+
 export const saveMember = async ({ email, name, profileUrl }) => {
   return await Member.create({
     email,
