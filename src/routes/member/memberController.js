@@ -10,3 +10,13 @@ export const signUpController = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getMemberInfoController = async (req, res, next) => {
+  try {
+    const { memberId } = req;
+    const memberInfo = await memberService.getMemberInfo(memberId);
+    res.status(200).send(new ApiResponse(memberInfo));
+  } catch (error) {
+    return next(error);
+  }
+};
