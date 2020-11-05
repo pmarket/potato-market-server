@@ -1,6 +1,6 @@
 import express from 'express';
 import * as memberController from './memberController';
-import { validateAuthToken } from '../../middleware/authTokenValidator';
+import * as authTokenValidator from '../../middleware/authTokenValidator';
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ router.post('/api/v1/member', memberController.signUpController);
 
 router.get(
   '/api/v1/member',
-  validateAuthToken,
+  authTokenValidator.validateAuthToken,
   memberController.getMemberInfoController
 );
 
