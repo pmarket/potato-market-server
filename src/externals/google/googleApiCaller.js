@@ -9,7 +9,10 @@ const getGoogleUserProfile = async (code) => {
       `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken.data.access_token}`
     );
   } catch (error) {
-    throw new ExternalApiException('구글과 연동 중 에러가 발생하였습니다');
+    throw new ExternalApiException(
+      '구글과 연동 중 에러가 발생하였습니다',
+      error
+    );
   }
 };
 

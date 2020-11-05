@@ -5,7 +5,7 @@ const logDir = 'logs';
 const { combine, timestamp, printf } = winston.format;
 
 const logFormat = printf((info) => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
+  return `${info.timestamp} ${info.level}: ${info.message} ${info.error}`;
 });
 
 const logger = winston.createLogger({

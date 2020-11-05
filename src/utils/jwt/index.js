@@ -6,7 +6,7 @@ export const decode = (token) => {
   try {
     return jwt.verify(token, config.jwt.secretKey);
   } catch (err) {
-    throw new TokenExpiredException('토큰이 만료 되었습니다');
+    throw new TokenExpiredException('토큰이 만료 되었습니다', err);
   }
 };
 
