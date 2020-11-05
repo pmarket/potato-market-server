@@ -1,10 +1,10 @@
-import { ApiResponse } from '../../common/apiResponse';
-import { googleAuthService } from '../../services/auth/authService';
+import { ApiResponse } from '../../common/CommonResponse';
+import * as authService from '../../services/auth/authService';
 
 export const googleAuthController = async (req, res, next) => {
-  const code = req.query.code;
+  const { code } = req.query;
   try {
-    const response = await googleAuthService(code);
+    const response = await authService.googleAuthService(code);
     return res.status(200).json(new ApiResponse(response));
   } catch (error) {
     return next(error);

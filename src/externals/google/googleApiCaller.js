@@ -1,10 +1,10 @@
 import axios from 'axios';
 import config from '../../config';
-import { ExternalApiException } from '../../exception/customException';
+import { ExternalApiException } from '../../exception/CustomExceptions';
 
-const getGoogleUserProfile = async (code) => {
+export const getGoogleUserProfile = async (code) => {
   try {
-    const accessToken = await getGoogleAccessToken(code);
+    const accessToken = await _getGoogleAccessToken(code);
     return await axios.get(
       `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken.data.access_token}`
     );
@@ -16,7 +16,7 @@ const getGoogleUserProfile = async (code) => {
   }
 };
 
-const getGoogleAccessToken = async (code) => {
+const _getGoogleAccessToken = async (code) => {
   return await axios.post('https://oauth2.googleapis.com/token', {
     client_id: config.google.client_id,
     client_secret: config.google.client_secret,
@@ -25,5 +25,3 @@ const getGoogleAccessToken = async (code) => {
     code: code,
   });
 };
-
-export default getGoogleUserProfile;

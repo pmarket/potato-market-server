@@ -1,6 +1,6 @@
 import express from 'express';
 import * as memberController from './memberController';
-import { validateAuthToken } from '../../middleware/tokenValidator';
+import { validateAuthToken } from '../../middleware/authTokenValidator';
 
 const router = express.Router();
 

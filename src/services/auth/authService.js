@@ -1,10 +1,10 @@
 import * as memberRepository from '../../repository/memberRepository';
-import getGoogleUserProfile from '../../externals/google/googleApiCaller';
+import * as googleApiCaller from '../../externals/google/googleApiCaller';
 import * as jwtUtils from '../../utils/jwt';
 import { authResponse } from './dto/authResponse';
 
 export const googleAuthService = async (code) => {
-  const userInfo = await getGoogleUserProfile(code);
+  const userInfo = await googleApiCaller.getGoogleUserProfile(code);
 
   const { email, name, picture } = userInfo.data;
   const findMember = await memberRepository.findMemberByEmail(email);

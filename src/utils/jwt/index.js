@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import config from '../../config';
-import { TokenExpiredException } from '../../exception/customException';
+import { TokenExpiredException } from '../../exception/CustomExceptions';
 
-export const decode = (token) => {
+export const decodeToken = (token) => {
   try {
     return jwt.verify(token, config.jwt.secretKey);
   } catch (err) {

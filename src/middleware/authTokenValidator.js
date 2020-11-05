@@ -1,5 +1,5 @@
 import * as jwtUtils from '../utils/jwt';
-import { TokenExpiredException } from '../exception/customException';
+import { TokenExpiredException } from '../exception/CustomExceptions';
 
 export const validateAuthToken = async (req, res, next) => {
   try {
@@ -7,7 +7,7 @@ export const validateAuthToken = async (req, res, next) => {
     if (!token) {
       throw new TokenExpiredException();
     }
-    const { memberId } = jwtUtils.decode(_removeBearer(token));
+    const { memberId } = jwtUtils.decodeToken(_removeBearer(token));
     req.memberId = memberId;
     next();
   } catch (e) {
