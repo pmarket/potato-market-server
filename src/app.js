@@ -25,7 +25,7 @@ class Server {
     this.express.get('/ping', (req, res) => {
       res.status(200).end('pong');
     });
-    this.express.use('', router);
+    this.express.use('/', router);
     this.express.use(handleCustomException);
   }
 

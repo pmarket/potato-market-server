@@ -4,14 +4,6 @@ services:
     image: ${IMAGE}:${TAG}
     ports:
       - 8001:8000
-    depends_on:
-      - mysql
-    networks:
-      - server
-  mysql:
-    image: mysql:5.7
-    volumes:
-      - /var/potato_db:/var/lib/mysql
     networks:
       - server
   web:
