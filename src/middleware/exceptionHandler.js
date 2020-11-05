@@ -1,5 +1,5 @@
 import { logger } from '../config/winston';
-import { ApiResponse } from '../common/CommonResponse';
+import { ApiResponse } from '../common/ApiResponse';
 
 export const handleCustomException = (err, req, res) => {
   logger.error(err);

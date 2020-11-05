@@ -1,5 +1,5 @@
 import * as jwtUtils from '../utils/jwt';
-import { TokenExpiredException } from '../exception/CustomExceptions';
+import { TokenExpiredException } from '../exception/CustomException';
 
 export const validateAuthToken = async (req, res, next) => {
   try {

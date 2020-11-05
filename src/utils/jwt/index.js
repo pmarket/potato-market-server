@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../../config';
-import { TokenExpiredException } from '../../exception/CustomExceptions';
+import { TokenExpiredException } from '../../exception/CustomException';
 
 export const decodeToken = (token) => {
   try {
