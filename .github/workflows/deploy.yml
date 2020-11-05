@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/deploy-prod
 
 jobs:
   build:
@@ -18,10 +19,30 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Make .env.prod
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_PORT: 8000
+          envkey_NODE_ENV: prod
+          envkey_DB_DATABASE: ${{secrets.DB_DATABASE}}
+          envkey_DB_USERNAME: ${{secrets.DB_USERNAME}}
+          envkey_DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          envkey_DB_PORT: ${{secrets.DB_PORT}}
+          envkey_DB_HOST: ${{secrets.DB_HOST}}
+
+          envkey_GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+          envkey_GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+          envkey_GOOGLE_GRANT_TYPE: ${{secrets.GOOGLE_GRANT_TYPE}}
+          envkey_GOOGLE_REDIRECT_URI: ${{secrets.GOOGLE_REDIRECT_URI}}
+
+          envkey_SECRET_KEY: ${{secrets.SECRET_KEY}}
+
+          file_name: .env.prod
+
       - name: create deploy/
         run: |
           mkdir -p deploy/nginx
-          cp docker-compose.blue.yml docker-compose.green.yml ./scripts/run.sh deploy/
+          cp docker-compose.blue.yml docker-compose.green.yml ./scripts/run.sh .env.prod deploy/
           cp nginx/* deploy/nginx
 
       - name: Login to GitHub Container Registry

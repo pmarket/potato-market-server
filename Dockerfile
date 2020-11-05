@@ -6,4 +6,4 @@ COPY . /potato
 RUN yarn install
 RUN yarn run build
 
-ENTRYPOINT ["yarn", "start:local"]
+ENTRYPOINT ["yarn", "start:prod"]
