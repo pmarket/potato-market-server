@@ -5,7 +5,10 @@ import { logger } from '../config/winston';
 
 async function connectDatabase() {
   try {
-    await sequelize.sync();
+    const options = {
+      force: process.env.NODE_ENV === 'test' ? true : false,
+    };
+    await sequelize.sync(options);
   } catch (error) {
     logger.error(`fail to connect to database error: ${error}`);
   }

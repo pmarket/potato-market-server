@@ -7,7 +7,8 @@
     "build": "npx babel src --out-dir dist",
     "start": "NODE_ENV=local nodemon --exec babel-node src/bin/www.js",
     "start:local": "NODE_ENV=local node dist/bin/www.js",
-    "start:prod": "NODE_ENV=prod node dist/bin/www.js"
+    "start:prod": "NODE_ENV=prod node dist/bin/www.js",
+    "test": "NODE_ENV=test mocha -r @babel/register test/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -27,14 +28,17 @@
     "winston-daily-rotate-file": "^4.5.0"
   },
   "dependencies": {
+    "@babel/register": "^7.12.1",
     "@babel/runtime": "^7.11.2",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.12",
+    "mocha": "^8.2.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "sequelize": "^6.3.5",
