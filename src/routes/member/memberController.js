@@ -1,5 +1,5 @@
 import * as memberService from '@src/services/member/memberService';
-import { ApiResponse } from '@src/common/ApiResponse';
+import { ApiResponse } from '@src/ApiResponse';
 
 export const signUpController = async (req, res, next) => {
   const { email, name, profileUrl } = req.body;

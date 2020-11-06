@@ -1,4 +1,4 @@
-import { ApiResponse } from '@src/common/ApiResponse';
+import { ApiResponse } from '@src/ApiResponse';
 import * as authService from '@src/services/auth/authService';
 
 export const googleAuthController = async (req, res, next) => {
