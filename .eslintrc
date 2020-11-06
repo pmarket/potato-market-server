@@ -12,6 +12,9 @@
     "browser": false,
     "node": true
   },
+  "standard": {
+    "env": ["mocha"]
+  },
   "ignorePatterns": ["node_modules/"],
   "rules": {
     "prettier/prettier": [
