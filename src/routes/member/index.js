@@ -1,6 +1,6 @@
 import express from 'express';
-import * as memberController from './memberController';
-import * as authTokenValidator from '../../middleware/authTokenValidator';
+import * as memberController from '@src/routes/member/memberController';
+import * as authTokenValidator from '@src/middleware/authTokenValidator';
 
 const router = express.Router();
 

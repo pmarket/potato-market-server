@@ -1,4 +1,4 @@
-import { ConflictException } from '../../exception/CustomException';
+import { ConflictException } from '@src/exception/CustomException';
 
 export const validateNotExistMember = async (memberRepository, email) => {
   const findMember = await memberRepository.findMemberByEmail(email);

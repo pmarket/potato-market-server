@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { logger } from './winston';
+import { logger } from '@src/config/winston';
 
 dotenv.config({
   path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),

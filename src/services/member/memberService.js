@@ -1,6 +1,6 @@
-import * as memberRepository from '../../repository/memberRepository';
+import * as memberRepository from '@src/repository/memberRepository';
 import * as memberServiceUtils from './memberServiceUtils';
-import * as jwtUtils from '../../utils/jwt';
+import * as jwtUtils from '@src/utils/jwt';
 import { memberInfoResponse } from './dto/memberInfoResponse';
 
 export const signUpMember = async (email, name, profileUrl) => {

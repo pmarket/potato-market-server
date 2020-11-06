@@ -1,7 +1,7 @@
-import app from '../app';
-import config from '../config';
-import { sequelize } from '../model';
-import { logger } from '../config/winston';
+import app from '@src/app';
+import config from '@src/config';
+import { sequelize } from '@src/model';
+import { logger } from '@src/config/winston';
 
 async function connectDatabase() {
   try {

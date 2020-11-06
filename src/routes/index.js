@@ -1,7 +1,7 @@
 import express from 'express';
-import boardRouter from './board';
-import authRouter from './auth';
-import memberRouter from './member';
+import boardRouter from '@src/routes/board';
+import authRouter from '@src/routes/auth';
+import memberRouter from '@src/routes/member';
 
 const router = express.Router();
 

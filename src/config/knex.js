@@ -1,5 +1,5 @@
 import knex from 'knex';
-import config from './index';
+import config from '@src/config';
 
 const db = knex({
   client: config.database.dialect,

@@ -1,7 +1,7 @@
-import * as memberRepository from '../../repository/memberRepository';
-import * as googleApiCaller from '../../externals/google/googleApiCaller';
-import * as jwtUtils from '../../utils/jwt';
-import { authResponse } from './dto/authResponse';
+import * as memberRepository from '@src/repository/memberRepository';
+import * as googleApiCaller from '@src/externals/google/googleApiCaller';
+import * as jwtUtils from '@src/utils/jwt';
+import { authResponse } from '@src/services/auth/dto/authResponse';
 
 export const googleAuthService = async (code) => {
   const userInfo = await googleApiCaller.getGoogleUserProfile(code);

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import * as memberRepository from '../../src/repository/memberRepository';
-import { sequelize, models } from '../../src/model';
+import * as memberRepository from '@src/repository/memberRepository';
+import { sequelize, models } from '@src/model';
 
 describe('Member Repository', function () {
   beforeEach(() => sequelize.sync({ force: true }));

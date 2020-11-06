@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { sequelize, models } from '../../src/model';
-import * as memberService from '../../src/services/member/memberService';
+import { sequelize, models } from '@src/model';
+import * as memberService from '@src/services/member/memberService';
 
 describe('Member Service', function () {
   beforeEach(() => sequelize.sync({ force: true }));

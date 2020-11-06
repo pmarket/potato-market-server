@@ -5,8 +5,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import router from './routes';
-import { handleCustomException } from './middleware/exceptionHandler';
+import router from '@src/routes';
+import { handleCustomException } from '@src/middleware/exceptionHandler';
 
 class Server {
   constructor() {

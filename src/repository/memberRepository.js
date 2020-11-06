@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import Member from '../model/Member';
+import Member from '@src/model/Member';
 
 export const findMemberByEmail = async (email) => {
   return Member.findOne({

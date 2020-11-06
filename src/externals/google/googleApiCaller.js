@@ -1,6 +1,6 @@
 import axios from 'axios';
-import config from '../../config';
-import { ExternalApiException } from '../../exception/CustomException';
+import config from '@src/config';
+import { ExternalApiException } from '@src/exception/CustomException';
 
 export const getGoogleUserProfile = async (code) => {
   try {
