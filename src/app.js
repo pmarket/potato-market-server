@@ -6,7 +6,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import router from '@src/routes';
-import { handleCustomException } from '@src/middleware/exceptionHandler';
+import {
+  handleCustomException,
+  handleNotFoundException,
+} from '@src/middleware/exceptionHandler';
 
 class Server {
   constructor() {
@@ -26,6 +29,7 @@ class Server {
       res.status(200).end('pong');
     });
     this.express.use('/', router);
+    this.express.use(handleNotFoundException);
     this.express.use(handleCustomException);
   }
 
