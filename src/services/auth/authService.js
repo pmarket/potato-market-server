@@ -3,8 +3,11 @@ import * as googleApiCaller from '@src/externals/google/googleApiCaller';
 import * as jwtUtils from '@src/utils/jwt';
 import { authResponse } from '@src/services/auth/dto/authResponse';
 
-export const googleAuthService = async (code) => {
-  const userInfo = await googleApiCaller.getGoogleUserProfile(code);
+export const googleAuthService = async (code, redirectUri) => {
+  const userInfo = await googleApiCaller.getGoogleUserProfile(
+    code,
+    redirectUri
+  );
 
   const { email, name, picture } = userInfo.data;
   const findMember = await memberRepository.findMemberByEmail(email);

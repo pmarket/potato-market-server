@@ -30,7 +30,6 @@ const config = {
     client_id: process.env.GOOGLE_CLIENT_ID,
     client_secret: process.env.GOOGLE_CLIENT_SECRET,
     grant_type: process.env.GOOGLE_GRANT_TYPE,
-    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
   },
   jwt: {
     secretKey: process.env.SECRET_KEY,

@@ -32,7 +32,6 @@ jobs:
           envkey_GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
           envkey_GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
           envkey_GOOGLE_GRANT_TYPE: ${{secrets.GOOGLE_GRANT_TYPE}}
-          envkey_GOOGLE_REDIRECT_URI: ${{secrets.GOOGLE_REDIRECT_URI}}
 
           envkey_SECRET_KEY: ${{secrets.SECRET_KEY}}
 
