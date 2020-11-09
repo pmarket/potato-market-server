@@ -15,7 +15,8 @@ const router = express.Router();
  */
 
 router.post('/api/v1/product', (req, res) => {
-  const name = res.body.name;
+  const name = req.body.name;
+  const price = req.body.price;
   // TODO 게시물 등록하는거 만들어보기
 });
 
@@ -23,6 +24,13 @@ router.post('/api/v1/product', (req, res) => {
  * 모든 중고 거래 물건을 조회 하는 API
  * HTTP GET /api/v1/products
  */
+router.get('/api/v1/products', (req, res) => {
+  db.raw(`SELECT * FROM product`)
+    .then((response) => {
+      console.log(response[0])
+      res.status(200).send(response[0])
+    });
+})
 
 /**
  * 특정 중고 거래 물건을 조회하는 API
