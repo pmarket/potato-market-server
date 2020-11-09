@@ -27,8 +27,6 @@ router.post('/api/v1/product', (req, res) => {
       console.log(error);
       res.status(500).end("에러발생!!!!")
     })
-
-  // TODO 게시물 등록하는거 만들어보기
 });
 
 /**
@@ -43,14 +41,21 @@ router.get('/api/v1/products', (req, res) => {
     });
 })
 
+
 /**
  * 특정 중고 거래 물건을 조회하는 API
- * HTTP GET /api/v1/products?productId=1  <- 1 = product id
+ * HTTP GET /api/v1/product?productId=1  <- 1 = product id
  */
 router.get('/api/v1/product', (req, res) => {
   const productId = req.query.productId;
-
-  // TODO 특정 게시물을 조회하는 거 만들어보기
+  db.raw(`SELECT id, name, profile_url, sender_name FROM product WHERE id = ${productId}`)
+    .then((response) => {
+      console.log(response[0])
+      res.status(200).send(response[0])
+    }).catch((error) => {
+      console.log(error)
+      res.status(500).end("에러발생....")
+    })
 });
 
 export default router;
