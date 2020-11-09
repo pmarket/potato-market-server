@@ -17,6 +17,17 @@ const router = express.Router();
 router.post('/api/v1/product', (req, res) => {
   const name = req.body.name;
   const price = req.body.price;
+  const profileUrl = req.body.profileUrl;
+  const senderName = req.body.senderName;
+  db.raw(`INSERT INTO product(name, price, profile_url, sender_name) VALUES("${name}", ${price}, "${profileUrl}", "${senderName}")`)
+    .then((response) => {
+      console.log(response)
+      res.status(200).send("Ok");
+    }).catch((error) => {
+      console.log(error);
+      res.status(500).end("에러발생!!!!")
+    })
+
   // TODO 게시물 등록하는거 만들어보기
 });
 
