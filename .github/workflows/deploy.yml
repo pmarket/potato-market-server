@@ -37,6 +37,12 @@ jobs:
 
           file_name: .env.prod
 
+      - name: version
+        id: image-version
+        run: |
+          VERSION=`cat ./version.txt`-${{ github.run_number }}
+          echo "::set-output name=version::$VERSION"
+
       - name: create deploy/
         run: |
           mkdir -p deploy/nginx
@@ -54,7 +60,7 @@ jobs:
         env:
           DOCKER_REGISTRY: ghcr.io/2team-gamza
           DOCKER_REPOSITORY: potato-backend
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ steps.image-version.outputs.version }}
         run: |
           docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG .
           docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:latest
