@@ -19,7 +19,9 @@ router.post('/api/v1/product', (req, res) => {
   const price = req.body.price;
   const profileUrl = req.body.profileUrl;
   const senderName = req.body.senderName;
-  db.raw(`INSERT INTO product(name, price, profile_url, sender_name) VALUES("${name}", ${price}, "${profileUrl}", "${senderName}")`)
+  const content = req.body.content;
+
+  db.raw(`INSERT INTO product(name, price, profile_url, sender_name, content) VALUES("${name}", ${price}, "${profileUrl}", "${senderName}", "${content}")`)
     .then((response) => {
       console.log(response)
       res.status(200).send("Ok");
@@ -48,7 +50,7 @@ router.get('/api/v1/products', (req, res) => {
  */
 router.get('/api/v1/product', (req, res) => {
   const productId = req.query.productId;
-  db.raw(`SELECT id, name, profile_url, sender_name FROM product WHERE id = ${productId}`)
+  db.raw(`SELECT id, name, price, content FROM product WHERE id = ${productId}`)
     .then((response) => {
       console.log(response[0])
       res.status(200).send(response[0])
