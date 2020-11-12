@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/api/v1/upload', upload.single('file'), (req, res, next) => {
   try {
     logger.info(`파일이 업로드 되었습니다. ${req.file}`);
-    res.status(200).send(new ApiResponse({ url: req.file.location }));
+    res.status(200).send(new ApiResponse(req.file.location));
   } catch (err) {
     next(err);
   }
