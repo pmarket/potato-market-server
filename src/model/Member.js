@@ -15,10 +15,14 @@ export default class Member extends Model {
           field: 'email',
           type: DataTypes.STRING,
           allowNull: false,
+          validate: {
+            isEmail: true,
+          },
         },
         name: {
           field: 'name',
           type: DataTypes.STRING,
+          allowNull: false,
         },
         profileUrl: {
           field: 'profile_url',

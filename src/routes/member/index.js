@@ -1,10 +1,15 @@
 import express from 'express';
 import * as memberController from '@src/routes/member/memberController';
 import * as authTokenValidator from '@src/middleware/authTokenValidator';
+import { validateRequestValues } from '@src/middleware/requestValidator';
 
 const router = express.Router();
 
-router.post('/api/v1/member', memberController.signUpController);
+router.post(
+  '/api/v1/member',
+  validateRequestValues('body', ['email', 'name']),
+  memberController.signUpController
+);
 
 router.get(
   '/api/v1/member',

@@ -32,6 +32,6 @@ export class TokenExpiredException extends BaseException {
 
 export class ExternalApiException extends BaseException {
   constructor(message, data = null) {
-    super(500, 'EXTERNAL_EXCEPTION', message, data);
+    super(502, 'EXTERNAL_EXCEPTION', message, data);
   }
 }
