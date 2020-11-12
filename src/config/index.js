@@ -34,6 +34,12 @@ const config = {
   jwt: {
     secretKey: process.env.SECRET_KEY,
   },
+  aws: {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    bucket: process.env.BUCKET_NAME,
+    region: 'ap-northeast-2',
+  },
 };
 
 export default config;

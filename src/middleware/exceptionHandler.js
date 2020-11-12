@@ -8,8 +8,14 @@ export const handleNotFoundException = (req, res, next) => {
 };
 
 export const handleCustomException = (err, req, res, next) => {
+  if (!err.status) {
+    logger.error(err.message);
+    return res
+      .status(500)
+      .json(new ApiResponse(null, 'INTERNAL_EXCEPTION', ''));
+  }
   logger.error(err);
   return res
-    .status(err.status)
+    .status(err.status || 500)
     .json(new ApiResponse(null, err.code, err.message));
 };
