@@ -67,22 +67,25 @@ router.delete('/api/v1/product', (req, res, next) => {
   });
 });
 
-// router.put('/api/vi/product', (req, res) => {
-//   const productId = req.query.productId;
-//   db.raw(`SELECT id FROM WHERE id = ${product}`).then((response) => {
-//     if (response[0] === 0) {
-//       res.status(404).send('수정할 수 없습니다.');
-//     }
-//     db.raw(
-//       `UPDATE product SET name, price, profileUrl, senderName, content = "${name}", ${price}, "${profileUrl}", "${senderName}", "${content}"`
-//     )
-//       .then((response) => {
-//         res.status(200).log(response);
-//       })
-//       .catch((error) => {
-//         res.status(500).end('에러발생');
-//       });
-//   });
-// });
+/**
+ * 특정 중고 거래 물건을 수정하는 API
+ */
+router.put('/api/v1/product', (req, res, next) => {
+  const { productId, name, price, profileUrl, content } = req.body;
+  db.raw(`SELECT * FROM product WHERE id = ${productId}`).then((response) => {
+    if (response[0].length === 0) {
+      res.status(404).send('해당하는 상품은 존재하지 않습니다');
+    }
+    db.raw(
+      `UPDATE product SET name="${name}", price=${price}, profile_url="${profileUrl}", content="${content}"`
+    )
+      .then(() => {
+        res.status(200).send('수정 완료');
+      })
+      .catch((error) => {
+        next(error);
+      });
+  });
+});
 
 export default router;
