@@ -1,10 +1,11 @@
 import { Op } from 'sequelize';
 import Member from '@src/model/Member';
 
-export const findMemberByEmail = async (email) => {
+export const findMemberByEmailAndProvider = async (email, provider) => {
   return Member.findOne({
     where: {
       email: { [Op.eq]: email },
+      provider: { [Op.eq]: provider },
     },
   });
 };
@@ -17,10 +18,11 @@ export const findMemberById = async (id) => {
   });
 };
 
-export const saveMember = async ({ email, name, profileUrl }) => {
+export const saveMember = async ({ email, name, profileUrl, provider }) => {
   return await Member.create({
     email,
     name,
     profileUrl,
+    provider,
   });
 };

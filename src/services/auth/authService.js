@@ -2,6 +2,7 @@ import * as memberRepository from '@src/repository/memberRepository';
 import * as googleApiCaller from '@src/externals/google/googleApiCaller';
 import * as jwtUtils from '@src/utils/jwt';
 import { authResponse } from '@src/services/auth/dto/authResponse';
+import * as MemberProvider from '@src/type/MemberProvider';
 
 export const googleAuthService = async (code, redirectUri) => {
   const userInfo = await googleApiCaller.getGoogleUserProfile(
@@ -10,7 +11,10 @@ export const googleAuthService = async (code, redirectUri) => {
   );
 
   const { email, name, picture } = userInfo.data;
-  const findMember = await memberRepository.findMemberByEmail(email);
+  const findMember = await memberRepository.findMemberByEmailAndProvider(
+    email,
+    MemberProvider.GOOGLE
+  );
   if (findMember == null) {
     // 해당 유저가 없을 경우, 회원가입을 위한 정보 반환한다.
     return authResponse('SIGN_UP', email, name, picture, null);

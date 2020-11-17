@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   '/api/v1/member',
   validateRequestValues('body', ['email', 'name']),
-  memberController.signUpController
+  memberController.signUpGoogleController
 );
 
 router.get(
