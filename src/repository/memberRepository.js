@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import Member from '@src/model/Member';
+import * as MemberProvider from '@src/type/MemberProvider';
 
 export const findMemberByEmailAndProvider = async (email, provider) => {
   return Member.findOne({
@@ -18,11 +19,21 @@ export const findMemberById = async (id) => {
   });
 };
 
-export const saveMember = async ({ email, name, profileUrl, provider }) => {
+export const saveGoogleMember = async ({ email, name, profileUrl }) => {
   return await Member.create({
     email,
     name,
     profileUrl,
-    provider,
+    provider: MemberProvider.GOOGLE,
+  });
+};
+
+export const saveLocalMember = async ({ email, name, password, salt }) => {
+  return await Member.create({
+    email,
+    name,
+    password,
+    salt,
+    provider: MemberProvider.LOCAL,
   });
 };

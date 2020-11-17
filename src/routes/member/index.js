@@ -11,6 +11,12 @@ router.post(
   memberController.signUpGoogleController
 );
 
+router.post(
+  '/api/v1/signup/local',
+  validateRequestValues('body', ['email', 'name', 'password']),
+  memberController.signUpLocalController
+);
+
 router.get(
   '/api/v1/member',
   authTokenValidator.validateAuthToken,

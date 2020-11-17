@@ -1,6 +1,7 @@
 import * as memberRepository from '@src/repository/memberRepository';
 import * as memberServiceUtils from './memberServiceUtils';
 import * as jwtUtils from '@src/utils/jwt';
+import * as PasswordUtils from '@src/utils/password';
 import * as MemberProvider from '@src/type/MemberProvider';
 import { memberInfoResponse } from './dto/memberInfoResponse';
 
@@ -10,11 +11,26 @@ export const signUpGoogleMember = async (email, name, profileUrl) => {
     email,
     MemberProvider.GOOGLE
   );
-  const newMember = await memberRepository.saveMember({
+  const newMember = await memberRepository.saveGoogleMember({
     email: email,
     name: name,
     profileUrl: profileUrl,
-    provider: MemberProvider.GOOGLE,
+  });
+  return jwtUtils.createToken(newMember.dataValues.id);
+};
+
+export const signUpLocalMember = async (email, name, password) => {
+  await memberServiceUtils.validateNotExistMember(
+    memberRepository,
+    email,
+    MemberProvider.LOCAL
+  );
+  const salt = PasswordUtils.makeSalt();
+  const newMember = await memberRepository.saveLocalMember({
+    email: email,
+    name: name,
+    password: PasswordUtils.hashPassword(password, salt),
+    salt: salt,
   });
   return jwtUtils.createToken(newMember.dataValues.id);
 };
