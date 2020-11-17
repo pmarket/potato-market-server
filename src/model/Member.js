@@ -20,12 +20,12 @@ export default class Member extends Model {
             isEmail: true,
           },
         },
-        memberId: {
-          field: 'memberId',
-          type: DataTypes.STRING,
-        },
         password: {
           field: 'password',
+          type: DataTypes.STRING,
+        },
+        salt: {
+          field: 'salt',
           type: DataTypes.STRING,
         },
         name: {

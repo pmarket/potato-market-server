@@ -10,4 +10,10 @@ router.get(
   authController.googleAuthController
 );
 
+router.post(
+  '/api/v1/auth/local',
+  validateRequestValues('body', ['email', 'password']),
+  authController.googleLocalController
+);
+
 export default router;
