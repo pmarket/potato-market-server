@@ -6,7 +6,7 @@ import { validateRequestValues } from '@src/middleware/requestValidator';
 const router = express.Router();
 
 router.post(
-  '/api/v1/member',
+  '/api/v1/signup/google',
   validateRequestValues('body', ['email', 'name']),
   memberController.signUpGoogleController
 );
