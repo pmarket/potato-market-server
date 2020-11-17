@@ -12,7 +12,7 @@ describe('Member Service', function () {
     const profileUrl = 'http://profileUrl.com';
 
     // when
-    await memberService.signUpMember(email, name, profileUrl);
+    await memberService.signUpGoogleMember(email, name, profileUrl);
 
     // then
     const members = await models.Member.findAll();
@@ -20,5 +20,6 @@ describe('Member Service', function () {
     expect(members[0].dataValues.email).to.eq(email);
     expect(members[0].dataValues.name).to.eq(name);
     expect(members[0].dataValues.profileUrl).to.eq(profileUrl);
+    expect(members[0].dataValues.provider).to.eq('GOOGLE');
   });
 });

@@ -1,4 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
+import * as MemberProvider from '@src/type/MemberProvider';
 
 export default class Member extends Model {
   static init(sequelize) {
@@ -19,6 +20,14 @@ export default class Member extends Model {
             isEmail: true,
           },
         },
+        memberId: {
+          field: 'memberId',
+          type: DataTypes.STRING,
+        },
+        password: {
+          field: 'password',
+          type: DataTypes.STRING,
+        },
         name: {
           field: 'name',
           type: DataTypes.STRING,
@@ -27,6 +36,12 @@ export default class Member extends Model {
         profileUrl: {
           field: 'profile_url',
           type: DataTypes.STRING,
+        },
+        provider: {
+          type: DataTypes.ENUM({
+            values: [MemberProvider.GOOGLE, MemberProvider.LOCAL],
+          }),
+          allowNull: false,
         },
       },
       {

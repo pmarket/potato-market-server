@@ -10,12 +10,21 @@ describe('Member Repository', function () {
     const email = 'will.seungho@gmail.com';
     const name = 'alice';
     const profileUrl = 'http://profileUrl.com';
+    const provider = 'GOOGLE';
 
-    const member = { email: email, name: name, profileUrl: profileUrl };
+    const member = {
+      email: email,
+      name: name,
+      profileUrl: profileUrl,
+      provider: provider,
+    };
     models.Member.bulkCreate([member]);
 
     // when
-    const findMember = await memberRepository.findMemberByEmail(email);
+    const findMember = await memberRepository.findMemberByEmailAndProvider(
+      email,
+      provider
+    );
 
     // then
     expect(findMember.dataValues.email).to.eq(email);

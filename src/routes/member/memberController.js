@@ -2,11 +2,15 @@ import * as memberService from '@src/services/member/memberService';
 import { ApiResponse } from '@src/ApiResponse';
 import { ValidationException } from '@src/exception/CustomException';
 
-export const signUpController = async (req, res, next) => {
+export const signUpGoogleController = async (req, res, next) => {
   const { email, name, profileUrl } = req.body;
   try {
     _validateEmailFormat(email);
-    const token = await memberService.signUpMember(email, name, profileUrl);
+    const token = await memberService.signUpGoogleMember(
+      email,
+      name,
+      profileUrl
+    );
     return res.status(200).json(new ApiResponse(token));
   } catch (error) {
     return next(error);
