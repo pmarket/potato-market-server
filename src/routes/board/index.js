@@ -1,14 +1,15 @@
 import express from 'express';
 import db from '@src/config/knex';
+import { validateAuthToken } from '@src/middleware/authTokenValidator';
 
 const router = express.Router();
 
 /**
  * 중고 거래 물건을 등록하는 API
  */
-router.post('/api/v1/product', (req, res, next) => {
+router.post('/api/v1/product', validateAuthToken, (req, res, next) => {
   const { name, price, profileUrl, content } = req.body;
-  const memberId = -1; // 인증쪽 작업 전에 임시로 넣어두는 값
+  const { memberId } = req;
 
   db.raw(
     `INSERT INTO product(name, price, profile_url, content, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", ${memberId})`
