@@ -34,3 +34,14 @@ export const getMemberInfoController = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const updateMemberInfoController = async (req, res, next) => {
+  const { memberId } = req;
+  const { name, profileUrl } = req.body;
+  try {
+    await memberService.updateMemberInfo(memberId, name, profileUrl);
+    res.status(200).send(new ApiResponse('OK'));
+  } catch (error) {
+    return next(error);
+  }
+};

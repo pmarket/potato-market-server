@@ -8,20 +8,25 @@ const router = express.Router();
 /**
  * 중고 거래 물건을 등록하는 API
  */
-router.post('/api/v1/product', validateAuthToken, (req, res, next) => {
-  const { name, price, profileUrl, content } = req.body;
-  const { memberId } = req;
+router.post(
+  '/api/v1/product',
+  validateRequestValues('body', 'name', 'price', 'profileUrl', 'content'),
+  validateAuthToken,
+  (req, res, next) => {
+    const { name, price, profileUrl, content } = req.body;
+    const { memberId } = req;
 
-  db.raw(
-    `INSERT INTO product(name, price, profile_url, content, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", ${memberId})`
-  )
-    .then(() => {
-      res.status(200).send('Ok');
-    })
-    .catch((error) => {
-      next(error);
-    });
-});
+    db.raw(
+      `INSERT INTO product(name, price, profile_url, content, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", ${memberId})`
+    )
+      .then(() => {
+        res.status(200).send('Ok');
+      })
+      .catch((error) => {
+        next(error);
+      });
+  }
+);
 
 /**
  * 모든 중고 거래 물건을 조회 하는 API

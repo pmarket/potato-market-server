@@ -39,3 +39,8 @@ export const getMemberInfo = async (memberId) => {
   const findMember = await memberRepository.findMemberById(memberId);
   return memberInfoResponse(findMember.dataValues);
 };
+
+export const updateMemberInfo = async (memberId, name, profileUrl) => {
+  const findMember = await memberRepository.findMemberById(memberId);
+  findMember.update({ name: name, profileUrl: profileUrl });
+};

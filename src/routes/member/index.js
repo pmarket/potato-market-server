@@ -30,4 +30,11 @@ router.get(
   memberController.getMemberInfoController
 );
 
+router.put(
+  '/api/v1/member',
+  validateRequestValues('body', ['name', 'profileUrl']),
+  validateAuthToken,
+  memberController.updateMemberInfoController
+);
+
 export default router;
