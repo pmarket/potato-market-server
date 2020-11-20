@@ -1,5 +1,5 @@
 import express from 'express';
-import * as myproductController from '@src/routes/product/myproductController';
+import * as myproductController from './myProductController';
 import { validateAuthToken } from '@src/middleware/authTokenValidator';
 
 const router = express.Router();
