@@ -10,7 +10,7 @@ const router = express.Router();
  */
 router.post(
   '/api/v1/product',
-  validateRequestValues('body', 'name', 'price', 'profileUrl', 'content'),
+  validateRequestValues('body', ['name', 'price', 'profileUrl', 'content']),
   validateAuthToken,
   (req, res, next) => {
     const { name, price, profileUrl, content } = req.body;
