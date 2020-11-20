@@ -28,6 +28,11 @@ router.post('/api/v1/product', validateAuthToken, (req, res, next) => {
 router.get('/api/v1/products', (_req, res, next) => {
   db.raw(`SELECT * FROM product`)
     .then((response) => {
+      const senderIds = [];
+      response[0].forEach(function (product) {
+        senderIds.push(product.sender_id);
+      });
+      console.log(senderIds);
       res.status(200).send(response[0]);
     })
     .catch((error) => {
