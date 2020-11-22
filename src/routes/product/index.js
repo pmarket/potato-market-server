@@ -34,17 +34,27 @@ router.post(
 router.get('/api/v1/products', (_req, res, next) => {
   db.raw(`SELECT * FROM product`)
     .then((response) => {
-      const senderIds = [];
-      response[0].forEach(function (product) {
-        senderIds.push(product.sender_id);
-      });
-      console.log(senderIds);
       res.status(200).send(response[0]);
     })
     .catch((error) => {
       next(error);
     });
 });
+
+router.get(
+  '/api/v1/product/list',
+  validateRequestValues('query', ['limit', 'offset']),
+  (req, res, next) => {
+    const { offset, limit } = req.query;
+    db.raw(`SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`)
+      .then((response) => {
+        res.status(200).send(response[0]);
+      })
+      .catch((error) => {
+        next(error);
+      });
+  }
+);
 
 /**
  * 특정 중고 거래 물건을 조회하는 API
