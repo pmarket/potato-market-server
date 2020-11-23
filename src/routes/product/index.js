@@ -51,22 +51,25 @@ router.get(
       const countResponse = await db.raw(
         `SELECT COUNT(*) as total_count FROM product`
       );
-      const response = [
-        {
-          totalCount: countResponse[0][0].total_count,
-          limit: limit,
-          offset: offset,
-        },
-      ];
       const findProducts = await db.raw(
         `SELECT * FROM product ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
           offset * limit
         }`
       );
+      const products = [];
       findProducts[0].map((findProduct) => {
-        response.push(_productListResponse(findProduct));
+        products.push(_productListResponse(findProduct));
       });
-      res.status(200).send(new ApiResponse(response));
+      res.status(200).send(
+        new ApiResponse({
+          page: {
+            totalCount: countResponse[0][0].total_count,
+            limit: limit,
+            offset: offset,
+          },
+          products,
+        })
+      );
     } catch (error) {
       next(error);
     }
