@@ -2,6 +2,7 @@ import express from 'express';
 import db from '@src/config/knex';
 import { validateAuthToken } from '@src/middleware/authTokenValidator';
 import { validateRequestValues } from '@src/middleware/requestValidator';
+import { ApiResponse } from '@src/ApiResponse';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.post(
       `INSERT INTO product(name, price, profile_url, content, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", ${memberId})`
     )
       .then(() => {
-        res.status(200).send('Ok');
+        res.status(200).send(new ApiResponse('Ok'));
       })
       .catch((error) => {
         next(error);
@@ -44,17 +45,45 @@ router.get('/api/v1/products', (_req, res, next) => {
 router.get(
   '/api/v1/product/list',
   validateRequestValues('query', ['limit', 'offset']),
-  (req, res, next) => {
-    const { offset, limit } = req.query;
-    db.raw(`SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`)
-      .then((response) => {
-        res.status(200).send(response[0]);
-      })
-      .catch((error) => {
-        next(error);
+  async (req, res, next) => {
+    try {
+      const { offset, limit } = req.query;
+      const countResponse = await db.raw(
+        `SELECT COUNT(*) as total_count FROM product`
+      );
+      const response = [
+        {
+          totalCount: countResponse[0][0].total_count,
+          limit: limit,
+          offset: offset,
+        },
+      ];
+      const findProducts = await db.raw(
+        `SELECT * FROM product ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
+          offset * limit
+        }`
+      );
+      findProducts[0].map((findProduct) => {
+        response.push(_productListResponse(findProduct));
       });
+      res.status(200).send(new ApiResponse(response));
+    } catch (error) {
+      next(error);
+    }
   }
 );
+
+const _productListResponse = (response) => {
+  return {
+    id: response.id,
+    name: response.name,
+    price: response.price,
+    content: response.content,
+    profileUrl: response.profile_url,
+    isSold: response.is_sold,
+    createdDateTime: response.created_data_time,
+  };
+};
 
 /**
  * 특정 중고 거래 물건을 조회하는 API
@@ -63,7 +92,7 @@ router.get('/api/v1/product', (req, res, next) => {
   const productId = req.query.productId;
   db.raw(`SELECT * FROM product WHERE id = ${productId}`)
     .then((response) => {
-      res.status(200).send(response[0]);
+      res.status(200).send(new ApiResponse(response[0]));
     })
     .catch((error) => {
       next(error);
@@ -90,7 +119,7 @@ router.delete(
         `DELETE FROM product WHERE id = ${productId} AND sender_id=${memberId}`
       )
         .then(() => {
-          res.status(200).send('OK');
+          res.status(200).send(new ApiResponse('OK'));
         })
         .catch((error) => {
           next(error);
@@ -126,7 +155,7 @@ router.put(
       WHERE id=${productId} AND sender_id=${memberId} AND is_sold=false`
       )
         .then(() => {
-          res.status(200).send('수정 완료');
+          res.status(200).send(new ApiResponse('수정 완료'));
         })
         .catch((error) => {
           next(error);
