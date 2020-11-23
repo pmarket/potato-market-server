@@ -12,7 +12,13 @@ export const handleCustomException = (err, req, res, next) => {
     logger.error(err.message);
     return res
       .status(500)
-      .json(new ApiResponse(null, 'INTERNAL_EXCEPTION', ''));
+      .json(
+        new ApiResponse(
+          null,
+          'INTERNAL_EXCEPTION',
+          '비정상적인 에러가 발생하였습니다'
+        )
+      );
   }
   logger.error(err);
   return res
