@@ -95,7 +95,46 @@ router.get('/api/v1/product', (req, res, next) => {
   const productId = req.query.productId;
   db.raw(`SELECT * FROM product WHERE id = ${productId}`)
     .then((response) => {
-      res.status(200).send(new ApiResponse(response[0]));
+      const {
+        id,
+        name,
+        price,
+        content,
+        profile_url,
+        is_sold,
+        created_data_time,
+      } = response[0][0];
+      const productId = id;
+      const productPicture = profile_url;
+      const productName = name;
+      const senderId = response[0][0].sender_id;
+      // Member.id를 가지고 어떤 정보를 얻어와야 할까요 ? email, 이름 , 프로필 사진
+      db.raw(`SELECT * FROM member WHERE id  = ${senderId}`)
+        .then((response) => {
+          const { id, email, name, profile_url } = response[0][0];
+          res.status(200).send(
+            new ApiResponse({
+              product: {
+                id: productId,
+                name: productName,
+                price: price,
+                content: content,
+                profileUrl: productPicture,
+                isSold: is_sold,
+                createdDateTime: created_data_time,
+              },
+              sender: {
+                id: id,
+                email: email,
+                name: name,
+                profileUrl: profile_url,
+              },
+            })
+          );
+        })
+        .catch((error) => {
+          next(error);
+        });
     })
     .catch((error) => {
       next(error);
