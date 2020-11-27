@@ -56,9 +56,8 @@ router.get(
           offset * limit
         }`
       );
-      const products = [];
-      findProducts[0].map((findProduct) => {
-        products.push(_productListResponse(findProduct));
+      const products = findProducts[0].map((findProduct) => {
+        return _productListResponse(findProduct);
       });
       res.status(200).send(
         new ApiResponse({

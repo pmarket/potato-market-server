@@ -11,11 +11,11 @@ export const signUpGoogleMember = async (email, name, profileUrl) => {
     email,
     MemberProvider.GOOGLE
   );
-  const newMember = await memberRepository.saveGoogleMember({
-    email: email,
-    name: name,
-    profileUrl: profileUrl,
-  });
+  const newMember = await memberRepository.saveGoogleMember(
+    email,
+    name,
+    profileUrl
+  );
   return JwtUtils.createToken(newMember.dataValues.id);
 };
 
@@ -26,12 +26,12 @@ export const signUpLocalMember = async (email, name, password) => {
     MemberProvider.LOCAL
   );
   const salt = PasswordUtils.createSalt();
-  const newMember = await memberRepository.saveLocalMember({
-    email: email,
-    name: name,
-    password: PasswordUtils.encryptPassword(password, salt),
-    salt: salt,
-  });
+  const newMember = await memberRepository.saveLocalMember(
+    email,
+    name,
+    PasswordUtils.encryptPassword(password, salt),
+    salt
+  );
   return JwtUtils.createToken(newMember.dataValues.id);
 };
 

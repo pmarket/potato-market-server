@@ -3,7 +3,7 @@ import Member from '@src/model/Member';
 import * as MemberProvider from '@src/type/MemberProvider';
 
 export const findMemberByEmailAndProvider = async (email, provider) => {
-  return Member.findOne({
+  return await Member.findOne({
     where: {
       email: { [Op.eq]: email },
       provider: { [Op.eq]: provider },
@@ -12,14 +12,14 @@ export const findMemberByEmailAndProvider = async (email, provider) => {
 };
 
 export const findMemberById = async (id) => {
-  return Member.findOne({
+  return await Member.findOne({
     where: {
       id: { [Op.eq]: id },
     },
   });
 };
 
-export const saveGoogleMember = async ({ email, name, profileUrl }) => {
+export const saveGoogleMember = async (email, name, profileUrl) => {
   return await Member.create({
     email,
     name,
@@ -28,7 +28,7 @@ export const saveGoogleMember = async ({ email, name, profileUrl }) => {
   });
 };
 
-export const saveLocalMember = async ({ email, name, password, salt }) => {
+export const saveLocalMember = async (email, name, password, salt) => {
   return await Member.create({
     email,
     name,
