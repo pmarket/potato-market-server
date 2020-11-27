@@ -3,6 +3,8 @@ import db from '@src/config/knex';
 import { validateAuthToken } from '@src/middleware/authTokenValidator';
 import { validateRequestValues } from '@src/middleware/requestValidator';
 import { ApiResponse } from '@src/ApiResponse';
+import * as commentService from '@src/services/comment/commentService';
+import { NotFoundException } from '@src/exception/CustomException';
 
 const router = express.Router();
 
@@ -93,56 +95,59 @@ const _productListResponse = (response) => {
 router.get(
   '/api/v1/product',
   validateRequestValues('query', ['productId']),
-  (req, res, next) => {
-    const productId = req.query.productId;
-    db.raw(`SELECT * FROM product WHERE id = ${productId}`)
-      .then((response) => {
-        const {
-          id,
-          name,
-          price,
-          content,
-          profile_url,
-          is_sold,
-          created_data_time,
-        } = response[0][0];
-        const productId = id;
-        const productPicture = profile_url;
-        const productName = name;
-        const senderId = response[0][0].sender_id;
-        // Member.id를 가지고 어떤 정보를 얻어와야 할까요 ? email, 이름 , 프로필 사진
-        db.raw(`SELECT * FROM member WHERE id  = ${senderId}`)
-          .then((response) => {
-            const { id, email, name, profile_url } = response[0][0];
-            res.status(200).send(
-              new ApiResponse({
-                product: {
-                  id: productId,
-                  name: productName,
-                  price: price,
-                  content: content,
-                  profileUrl: productPicture,
-                  isSold: is_sold,
-                  createdDateTime: created_data_time,
-                },
-                sender: {
-                  id: id,
-                  email: email,
-                  name: name,
-                  profileUrl: profile_url,
-                },
-              })
-            );
-          })
-          .catch((error) => {
-            next(error);
-          });
-      })
-      .catch((error) => {
-        next(error);
-      });
+  async (req, res, next) => {
+    try {
+      const { productId } = req.query;
+      const products = await db.raw(
+        `SELECT * FROM product WHERE id = ${productId}`
+      );
+      _validateExistProduct(products, productId);
+      const members = await db.raw(
+        `SELECT * FROM member WHERE id  = ${products[0][0].sender_id}`
+      );
+      const comments = await commentService.retrieveProductComment(productId);
+      res.status(200).send(
+        new ApiResponse({
+          product: _productResponse(products[0][0]),
+          sender: _senderResponse(members[0][0]),
+          comment: comments,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
   }
 );
+
+const _productResponse = (response) => {
+  return {
+    id: response.id,
+    name: response.name,
+    price: response.price,
+    content: response.content,
+    profileUrl: response.profile_url,
+    isSold: response.is_sold,
+    createdDateTime: response.created_data_time,
+  };
+};
+
+const _senderResponse = (response) => {
+  return {
+    id: response.id,
+    email: response.email,
+    name: response.name,
+    profileUrl: response.profile_url,
+  };
+};
+
+const _validateExistProduct = (response, productId) => {
+  if (response[0].length === 0) {
+    throw new NotFoundException(
+      '해당하는 id를 가진 상품은 존재하지 않습니다',
+      productId
+    );
+  }
+};
 
 /**
  * 특정 중고 거래 물건을 삭제하는 API
