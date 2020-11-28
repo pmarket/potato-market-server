@@ -3,7 +3,7 @@ name: Backend Server Deploys
 on:
   push:
     branches:
-      - develop
+      - test
 
 jobs:
   build:
