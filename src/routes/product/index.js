@@ -108,33 +108,19 @@ router.get(
          WHERE p.id=${productId}`
       );
       _validateExistProduct(response, productId);
-      const productResponse = _productResponse(response[0][0]);
-
       const comments = await commentService.retrieveProductComment(
         response[0][0].productId
       );
-      res.status(200).send(
-        new ApiResponse({
-          productResponse,
-          comment: comments,
-        })
-      );
+      res
+        .status(200)
+        .send(new ApiResponse(productDetailResponse(response[0][0], comments)));
     } catch (error) {
       next(error);
     }
   }
 );
 
-const _validateExistProduct = (response, productId) => {
-  if (response[0].length === 0) {
-    throw new NotFoundException(
-      '해당하는 id를 가진 상품은 존재하지 않습니다',
-      productId
-    );
-  }
-};
-
-const _productResponse = (response) => {
+const productDetailResponse = (response, comments) => {
   return {
     product: {
       id: response.productId,
@@ -151,7 +137,17 @@ const _productResponse = (response) => {
       name: response.memberName,
       profileUrl: response.memberProfileUrl,
     },
+    comment: comments,
   };
+};
+
+const _validateExistProduct = (response, productId) => {
+  if (response[0].length === 0) {
+    throw new NotFoundException(
+      '해당하는 id를 가진 상품은 존재하지 않습니다',
+      productId
+    );
+  }
 };
 
 /**
