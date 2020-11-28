@@ -54,7 +54,13 @@ router.get(
         `SELECT COUNT(*) as total_count FROM product`
       );
       const findProducts = await db.raw(
-        `SELECT * FROM product ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
+        `SELECT distinct 
+         p.id, p.name, p.price, p.content, p.profile_url, 
+         p.is_sold, p.created_data_time, member.profile_url as sender_profile_url
+         FROM product as p
+         INNER JOIN member
+         ON p.sender_id = member.id
+         ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
           offset * limit
         }`
       );
@@ -86,6 +92,7 @@ const _productListResponse = (response) => {
     profileUrl: response.profile_url,
     isSold: response.is_sold,
     createdDateTime: response.created_data_time,
+    senderProfileUrl: response.sender_profile_url,
   };
 };
 
