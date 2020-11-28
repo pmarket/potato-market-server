@@ -3,7 +3,7 @@ name: Backend Server Deploys
 on:
   push:
     branches:
-      - feature/ecs-fargate
+      - develop
 
 jobs:
   build:
@@ -87,4 +87,3 @@ jobs:
           task-definition: ${{ steps.render-web-container.outputs.task-definition }}
           service: PotatoServerProd
           cluster: PotatoServerCluster
-          wait-for-service-stability: true
