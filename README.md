@@ -6,6 +6,10 @@
 
 `yarn install`
 
+### Test
+
+`yarn test`
+
 ### Run
 
 `yarn start`
@@ -14,6 +18,10 @@
 
 `yarn build`
 
-### Test
+### Run: local
 
-`yarn test`
+`yarn start:local`
+
+### Run: prod
+
+`yarn start:prod`
