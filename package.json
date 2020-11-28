@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx babel src --out-dir dist",
-    "start": "node dist/index.js",
-    "start:local": "nodemon --exec babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=local nodemon --exec babel-node src/bin/www.js",
+    "start:local": "NODE_ENV=local node dist/bin/www.js",
+    "start:prod": "NODE_ENV=prod node dist/bin/www.js",
+    "test": "NODE_ENV=test mocha -r @babel/register tests/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -18,15 +19,36 @@
     "@babel/node": "^7.10.5",
     "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
+    "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "nodemon": "^2.0.4",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "dependencies": {
+    "@babel/register": "^7.12.1",
     "@babel/runtime": "^7.11.2",
+    "aws-sdk": "^2.790.0",
+    "axios": "^0.21.0",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.6"
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.12",
+    "mocha": "^8.2.1",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "path": "^0.12.7",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "uuid4": "^2.0.2"
   }
 }

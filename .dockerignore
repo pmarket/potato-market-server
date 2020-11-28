@@ -1,0 +1,17 @@
+node_modules/
+dist/
+scripts/
+.github/
+scripts/
+
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+*.log
+
+.eslintrc
+.prettierrc
+.gitignore
+appspec.yml
+README.md
