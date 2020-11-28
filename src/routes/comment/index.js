@@ -19,4 +19,11 @@ router.get(
   commentController.retrieveProductComment
 );
 
+router.delete(
+  '/api/v1/product/comment',
+  validateAuthToken,
+  validateRequestValues('query', ['commentId']),
+  commentController.deleteComment
+);
+
 export default router;

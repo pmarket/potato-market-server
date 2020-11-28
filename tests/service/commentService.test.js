@@ -42,4 +42,27 @@ describe('Comment Service', function () {
     expect(comments[0].productId).to.eq(productId);
     expect(comments[0].memberId).to.eq(memberId);
   });
+
+  it('멤버가 추가한 댓글을 삭제한다', async function () {
+    // given
+    const productId = 3;
+    const memberId = 1;
+    const content = '살래요!';
+
+    const comment = await models.Comment.bulkCreate([
+      {
+        productId: productId,
+        memberId: memberId,
+        content: content,
+      },
+    ]);
+    const commentId = comment[0].dataValues.id;
+
+    // when
+    await commentService.deleteComment(commentId, memberId);
+
+    // then
+    const comments = await models.Comment.findAll();
+    expect(comments.length).to.eq(0);
+  });
 });

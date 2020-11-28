@@ -20,3 +20,13 @@ export const retrieveProductComment = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const deleteComment = async (req, res, next) => {
+  const { commentId } = req.query;
+  try {
+    await commentService.deleteComment(commentId, req.memberId);
+    return res.status(200).json(new ApiResponse('OK'));
+  } catch (error) {
+    return next(error);
+  }
+};
