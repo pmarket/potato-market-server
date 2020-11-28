@@ -107,6 +107,7 @@ router.get(
          ON p.sender_id = m.id 
          WHERE p.id=${productId}`
       );
+      _validateExistProduct(response, productId);
       const productResponse = _productResponse(response[0][0]);
 
       const comments = await commentService.retrieveProductComment(
@@ -123,6 +124,15 @@ router.get(
     }
   }
 );
+
+const _validateExistProduct = (response, productId) => {
+  if (response[0].length === 0) {
+    throw new NotFoundException(
+      '해당하는 id를 가진 상품은 존재하지 않습니다',
+      productId
+    );
+  }
+};
 
 const _productResponse = (response) => {
   return {
