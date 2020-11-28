@@ -16,3 +16,20 @@ export const findCommentsByProductId = async (productId) => {
     },
   });
 };
+
+export const findCommentsByIdAndMemberId = async (commentId, memberId) => {
+  return await Comment.findOne({
+    where: {
+      id: { [Op.eq]: commentId },
+      memberId: { [Op.eq]: memberId },
+    },
+  });
+};
+
+export const deleteComment = async (commentId) => {
+  return await Comment.destroy({
+    where: {
+      id: { [Op.eq]: commentId },
+    },
+  });
+};

@@ -98,45 +98,72 @@ router.get(
   async (req, res, next) => {
     try {
       const { productId } = req.query;
-      const products = await db.raw(
-        `SELECT * FROM product WHERE id = ${productId}`
+      const productResponse = await db.raw(
+        `SELECT distinct 
+         p.id as productId, p.name as productName, p.price, p.content, p.profile_url as productProfileUrl, p.is_sold, p.created_data_time,
+         m.id as memberId, m.email, m.name as memberName, m.profile_url as memberProfileUrl 
+         FROM product as p 
+         INNER JOIN member as m 
+         ON p.sender_id = m.id 
+         WHERE p.id=${productId}`
       );
-      _validateExistProduct(products, productId);
-      const members = await db.raw(
-        `SELECT * FROM member WHERE id  = ${products[0][0].sender_id}`
-      );
-      const comments = await commentService.retrieveProductComment(productId);
-      res.status(200).send(
-        new ApiResponse({
-          product: _productResponse(products[0][0]),
-          sender: _senderResponse(members[0][0]),
-          comment: comments,
-        })
-      );
+      _validateExistProduct(productResponse, productId);
+      const comments = await db.raw(`SELECT distinct 
+      c.id as commentId, c.product_id as productId, c.content, c.createdAt, c.updatedAt,
+      m.id as memberId, m.email, m.name as memberName, m.profile_url as memberProfileUrl 
+      FROM comment as c 
+      INNER JOIN member as m 
+      ON c.member_id = m.id 
+      WHERE c.product_id=${productResponse[0][0].productId}`);
+      const commentResponse = comments[0].map((comment) => {
+        return _toCommentResponse(comment);
+      });
+      res
+        .status(200)
+        .send(
+          new ApiResponse(
+            productDetailResponse(productResponse[0][0], commentResponse)
+          )
+        );
     } catch (error) {
       next(error);
     }
   }
 );
 
-const _productResponse = (response) => {
+const _toCommentResponse = (comment) => {
   return {
-    id: response.id,
-    name: response.name,
-    price: response.price,
-    content: response.content,
-    profileUrl: response.profile_url,
-    isSold: response.is_sold,
-    createdDateTime: response.created_data_time,
+    id: comment.commentId,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    commenter: {
+      id: comment.memberId,
+      email: comment.email,
+      name: comment.memberName,
+      profileUrl: comment.memberProfileUrl,
+    },
   };
 };
 
-const _senderResponse = (response) => {
+const productDetailResponse = (response, comments) => {
   return {
-    id: response.id,
-    email: response.email,
-    name: response.name,
-    profileUrl: response.profile_url,
+    product: {
+      id: response.productId,
+      name: response.productName,
+      price: response.price,
+      content: response.content,
+      profileUrl: response.productProfileUrl,
+      isSold: response.is_sold,
+      createdDateTime: response.created_data_time,
+    },
+    sender: {
+      id: response.memberId,
+      email: response.email,
+      name: response.memberName,
+      profileUrl: response.memberProfileUrl,
+    },
+    comments,
   };
 };
 
