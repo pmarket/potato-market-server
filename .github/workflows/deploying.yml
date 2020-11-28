@@ -23,6 +23,7 @@ jobs:
         with:
           envkey_PORT: 8000
           envkey_NODE_ENV: prod
+
           envkey_DB_DATABASE: ${{secrets.DB_DATABASE}}
           envkey_DB_USERNAME: ${{secrets.DB_USERNAME}}
           envkey_DB_PASSWORD: ${{secrets.DB_PASSWORD}}
