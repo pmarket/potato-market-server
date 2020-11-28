@@ -1,6 +1,6 @@
 # 감자마켓 백엔드
 
-> Node.js로 만드는 중고 거래 API 서버
+> Node.js로 감자마켓 중고 거래 API 서버
 
 ### Install
 
