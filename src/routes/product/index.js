@@ -98,7 +98,7 @@ router.get(
   async (req, res, next) => {
     try {
       const { productId } = req.query;
-      const response = await db.raw(
+      const productResponse = await db.raw(
         `SELECT distinct 
          p.id as productId, p.name as productName, p.price, p.content, p.profile_url as productProfileUrl, p.is_sold, p.created_data_time,
          m.id as memberId, m.email, m.name as memberName, m.profile_url as memberProfileUrl 
@@ -107,18 +107,44 @@ router.get(
          ON p.sender_id = m.id 
          WHERE p.id=${productId}`
       );
-      _validateExistProduct(response, productId);
-      const comments = await commentService.retrieveProductComment(
-        response[0][0].productId
-      );
+      _validateExistProduct(productResponse, productId);
+      const comments = await db.raw(`SELECT distinct 
+      c.id as commentId, c.product_id as productId, c.content, c.createdAt, c.updatedAt,
+      m.id as memberId, m.email, m.name as memberName, m.profile_url as memberProfileUrl 
+      FROM comment as c 
+      INNER JOIN member as m 
+      ON c.member_id = m.id 
+      WHERE c.product_id=${productResponse[0][0].productId}`);
+      const commentResponse = comments[0].map((comment) => {
+        return _toCommentResponse(comment);
+      });
       res
         .status(200)
-        .send(new ApiResponse(productDetailResponse(response[0][0], comments)));
+        .send(
+          new ApiResponse(
+            productDetailResponse(productResponse[0][0], commentResponse)
+          )
+        );
     } catch (error) {
       next(error);
     }
   }
 );
+
+const _toCommentResponse = (comment) => {
+  return {
+    id: comment.commentId,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    commenter: {
+      id: comment.memberId,
+      email: comment.email,
+      name: comment.memberName,
+      profileUrl: comment.memberProfileUrl,
+    },
+  };
+};
 
 const productDetailResponse = (response, comments) => {
   return {
@@ -137,7 +163,7 @@ const productDetailResponse = (response, comments) => {
       name: response.memberName,
       profileUrl: response.memberProfileUrl,
     },
-    comment: comments,
+    comments,
   };
 };
 
