@@ -195,22 +195,48 @@ router.delete(
     const { memberId } = req;
     db.raw(
       `SELECT id FROM product WHERE id =${productId} AND sender_id=${memberId}`
-    ).then((response) => {
-      if (response[0].length === 0) {
-        res.status(404).send('해당 상품을 찾을 수 없어요');
+    )
+      .then((response) => {
+        if (response[0].length === 0) {
+          return res.status(404).send('해당 상품을 찾을 수 없어요');
+        }
+        db.raw(
+          `DELETE FROM product WHERE id = ${productId} AND sender_id=${memberId}`
+        )
+          .then(() => {
+            res.status(200).send(new ApiResponse('OK'));
+          })
+          .catch((error) => {
+            next(error);
+          });
+      })
+      .catch((error) => {
+        next(error);
+      });
+  }
+);
+
+router.put('/api/v1/product/is_done', validateAuthToken, (req, res, next) => {
+  const productId = req.body.productId;
+  db.raw(
+    `SELECT id FROM product WHERE id = ${productId} AND sender_id = ${req.memberId}`
+  )
+    .then((response) => {
+      if (response[0].length == 0) {
+        return res.status(404).send('없어! 돌아가');
       }
-      db.raw(
-        `DELETE FROM product WHERE id = ${productId} AND sender_id=${memberId}`
-      )
+      db.raw(`UPDATE product SET is_sold = true WHERE id = ${productId}`)
         .then(() => {
-          res.status(200).send(new ApiResponse('OK'));
+          res.status(200).send(new ApiResponse('ooooookk'));
         })
         .catch((error) => {
           next(error);
         });
+    })
+    .catch((error) => {
+      next(error);
     });
-  }
-);
+});
 
 /**
  * 특정 중고 거래 물건을 수정하는 API
