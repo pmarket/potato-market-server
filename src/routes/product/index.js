@@ -3,7 +3,6 @@ import db from '@src/config/knex';
 import { validateAuthToken } from '@src/middleware/authTokenValidator';
 import { validateRequestValues } from '@src/middleware/requestValidator';
 import { ApiResponse } from '@src/ApiResponse';
-import * as commentService from '@src/services/comment/commentService';
 import { NotFoundException } from '@src/exception/CustomException';
 
 const router = express.Router();
@@ -34,27 +33,26 @@ router.post(
 /**
  * 모든 중고 거래 물건을 조회 하는 API
  */
-router.get('/api/v1/products', (_req, res, next) => {
-  db.raw(`SELECT * FROM product`)
-    .then((response) => {
-      res.status(200).send(response[0]);
-    })
-    .catch((error) => {
-      next(error);
-    });
-});
-
 router.get(
   '/api/v1/product/list',
   validateRequestValues('query', ['limit', 'offset']),
   async (req, res, next) => {
     try {
       const { offset, limit } = req.query;
+      const keyword = req.query.keyword || '';
+
       const countResponse = await db.raw(
         `SELECT COUNT(*) as total_count FROM product`
       );
       const findProducts = await db.raw(
-        `SELECT * FROM product ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
+        `SELECT distinct 
+         p.id, p.name, p.price, p.content, p.profile_url, 
+         p.is_sold, p.created_data_time, member.profile_url as sender_profile_url
+         FROM product as p
+         INNER JOIN member
+         ON p.sender_id = member.id
+         WHERE p.name LIKE '%${keyword}%' OR p.content LIKE '%${keyword}%' 
+         ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
           offset * limit
         }`
       );
@@ -86,6 +84,7 @@ const _productListResponse = (response) => {
     profileUrl: response.profile_url,
     isSold: response.is_sold,
     createdDateTime: response.created_data_time,
+    senderProfileUrl: response.sender_profile_url,
   };
 };
 
@@ -188,22 +187,48 @@ router.delete(
     const { memberId } = req;
     db.raw(
       `SELECT id FROM product WHERE id =${productId} AND sender_id=${memberId}`
-    ).then((response) => {
-      if (response[0].length === 0) {
-        res.status(404).send('해당 상품을 찾을 수 없어요');
+    )
+      .then((response) => {
+        if (response[0].length === 0) {
+          return res.status(404).send('해당 상품을 찾을 수 없어요');
+        }
+        db.raw(
+          `DELETE FROM product WHERE id = ${productId} AND sender_id=${memberId}`
+        )
+          .then(() => {
+            res.status(200).send(new ApiResponse('OK'));
+          })
+          .catch((error) => {
+            next(error);
+          });
+      })
+      .catch((error) => {
+        next(error);
+      });
+  }
+);
+
+router.put('/api/v1/product/is_done', validateAuthToken, (req, res, next) => {
+  const productId = req.body.productId;
+  db.raw(
+    `SELECT id FROM product WHERE id = ${productId} AND sender_id = ${req.memberId}`
+  )
+    .then((response) => {
+      if (response[0].length == 0) {
+        return res.status(404).send('없어! 돌아가');
       }
-      db.raw(
-        `DELETE FROM product WHERE id = ${productId} AND sender_id=${memberId}`
-      )
+      db.raw(`UPDATE product SET is_sold = true WHERE id = ${productId}`)
         .then(() => {
-          res.status(200).send(new ApiResponse('OK'));
+          res.status(200).send(new ApiResponse('ooooookk'));
         })
         .catch((error) => {
           next(error);
         });
+    })
+    .catch((error) => {
+      next(error);
     });
-  }
-);
+});
 
 /**
  * 특정 중고 거래 물건을 수정하는 API

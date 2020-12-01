@@ -1,10 +1,14 @@
 # 감자마켓 백엔드
 
-> Node.js로 만드는 중고 거래 API 서버
+> Node.js로 감자마켓 중고 거래 API 서버
 
 ### Install
 
 `yarn install`
+
+### Test
+
+`yarn test`
 
 ### Run
 
@@ -14,6 +18,10 @@
 
 `yarn build`
 
-### Test
+### Run: local
 
-`yarn test`
+`yarn start:local`
+
+### Run: prod
+
+`yarn start:prod`
