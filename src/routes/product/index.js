@@ -3,7 +3,6 @@ import db from '@src/config/knex';
 import { validateAuthToken } from '@src/middleware/authTokenValidator';
 import { validateRequestValues } from '@src/middleware/requestValidator';
 import { ApiResponse } from '@src/ApiResponse';
-import * as commentService from '@src/services/comment/commentService';
 import { NotFoundException } from '@src/exception/CustomException';
 
 const router = express.Router();
@@ -34,22 +33,14 @@ router.post(
 /**
  * 모든 중고 거래 물건을 조회 하는 API
  */
-router.get('/api/v1/products', (_req, res, next) => {
-  db.raw(`SELECT * FROM product`)
-    .then((response) => {
-      res.status(200).send(response[0]);
-    })
-    .catch((error) => {
-      next(error);
-    });
-});
-
 router.get(
   '/api/v1/product/list',
   validateRequestValues('query', ['limit', 'offset']),
   async (req, res, next) => {
     try {
       const { offset, limit } = req.query;
+      const keyword = req.query.keyword || '';
+
       const countResponse = await db.raw(
         `SELECT COUNT(*) as total_count FROM product`
       );
@@ -60,6 +51,7 @@ router.get(
          FROM product as p
          INNER JOIN member
          ON p.sender_id = member.id
+         WHERE p.name LIKE '%${keyword}%' OR p.content LIKE '%${keyword}%' 
          ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
           offset * limit
         }`

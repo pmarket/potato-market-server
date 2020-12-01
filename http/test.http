@@ -55,7 +55,8 @@ Authorization: Bearer {{token}}
 }
 
 ### 모든 중고 거래 물건을 조회하는 API
-GET {{baseUrl}}/api/v1/products
+GET {{baseUrl}}/api/v1/product/list?limit=10&offset=0
 
-### 모든 중고 거래 물건을 조회하는 API (페이지네이션
-GET {{baseUrl}}/api/v1/products?limit=10&offset=0
+
+### 모든 중고 거래 물건을 조회하는 API (검색)
+GET {{baseUrl}}/api/v1/product/list?limit=10&offset=0&keyword=
