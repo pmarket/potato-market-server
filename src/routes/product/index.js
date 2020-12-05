@@ -15,11 +15,11 @@ router.post(
   validateRequestValues('body', ['name', 'price', 'profileUrl', 'content']),
   validateAuthToken,
   (req, res, next) => {
-    const { name, price, profileUrl, content } = req.body;
+    const { name, price, profileUrl, content, place } = req.body;
     const { memberId } = req;
 
     db.raw(
-      `INSERT INTO product(name, price, profile_url, content, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", ${memberId})`
+      `INSERT INTO product(name, price, profile_url, content, place, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", "${place}",${memberId})`
     )
       .then(() => {
         res.status(200).send(new ApiResponse('Ok'));
@@ -46,7 +46,7 @@ router.get(
       );
       const findProducts = await db.raw(
         `SELECT distinct 
-         p.id, p.name, p.price, p.content, p.profile_url, 
+         p.id, p.name, p.price, p.content, p.profile_url, p.place,
          p.is_sold, p.created_data_time, member.profile_url as sender_profile_url
          FROM product as p
          INNER JOIN member
@@ -82,6 +82,7 @@ const _productListResponse = (response) => {
     price: response.price,
     content: response.content,
     profileUrl: response.profile_url,
+    place: response.place,
     isSold: response.is_sold,
     createdDateTime: response.created_data_time,
     senderProfileUrl: response.sender_profile_url,
@@ -99,7 +100,7 @@ router.get(
       const { productId } = req.query;
       const productResponse = await db.raw(
         `SELECT distinct 
-         p.id as productId, p.name as productName, p.price, p.content, p.profile_url as productProfileUrl, p.is_sold, p.created_data_time,
+         p.id as productId, p.name as productName, p.price, p.content, p.profile_url as productProfileUrl, p.place, p.is_sold, p.created_data_time,
          m.id as memberId, m.email, m.name as memberName, m.profile_url as memberProfileUrl 
          FROM product as p 
          INNER JOIN member as m 
@@ -153,6 +154,7 @@ const productDetailResponse = (response, comments) => {
       price: response.price,
       content: response.content,
       profileUrl: response.productProfileUrl,
+      place: response.place,
       isSold: response.is_sold,
       createdDateTime: response.created_data_time,
     },
@@ -241,10 +243,11 @@ router.put(
     'price',
     'profileUrl',
     'content',
+    'place',
   ]),
   validateAuthToken,
   (req, res, next) => {
-    const { productId, name, price, profileUrl, content } = req.body;
+    const { productId, name, price, profileUrl, content, place } = req.body;
     const { memberId } = req;
     db.raw(
       `SELECT * FROM product WHERE id = ${productId} AND sender_id=${memberId}`
@@ -253,7 +256,7 @@ router.put(
         res.status(404).send('해당하는 상품은 존재하지 않습니다');
       }
       db.raw(
-        `UPDATE product SET name="${name}", price=${price}, profile_url="${profileUrl}", content="${content}"
+        `UPDATE product SET name="${name}", price=${price}, profile_url="${profileUrl}", content="${content}", place="${place}"
       WHERE id=${productId} AND sender_id=${memberId} AND is_sold=false`
       )
         .then(() => {

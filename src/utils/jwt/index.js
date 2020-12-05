@@ -20,7 +20,7 @@ export const createToken = (memberId) => {
     },
     config.jwt.secretKey,
     {
-      expiresIn: '30m',
+      expiresIn: '60m',
       issuer: 'potato',
     }
   );
