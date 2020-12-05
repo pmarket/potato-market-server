@@ -1,6 +1,6 @@
 # 감자마켓 백엔드
 
-> 중고 거래 API 서버
+> 중고 거래 서비스 API 서버
 
 ### 전체 아키텍처 모델
 
@@ -20,6 +20,8 @@
 - AWS RDS (MySQL 5.7)
 - Application Load Balancer (ALB)
 - Github Action CI/CD
+
+## Script
 
 ### Install
 
