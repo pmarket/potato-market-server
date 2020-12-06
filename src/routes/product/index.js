@@ -18,6 +18,18 @@ router.post(
     const { name, price, profileUrl, content, place } = req.body;
     const { memberId } = req;
 
+    if (Number(price) < 0) {
+      return res
+        .status(400)
+        .send(
+          new ApiResponse(
+            null,
+            'VALIDATION_EXCEPTION',
+            '가격은 0원 이상이어야 합니다'
+          )
+        );
+    }
+
     db.raw(
       `INSERT INTO product(name, price, profile_url, content, place, sender_id) VALUES("${name}", ${price}, "${profileUrl}", "${content}", "${place}",${memberId})`
     )
