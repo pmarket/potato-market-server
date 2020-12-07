@@ -4,6 +4,12 @@ import { validateRequestValues } from '@src/middleware/requestValidator';
 import { ApiResponse } from '@src/ApiResponse';
 import { NotFoundException } from '@src/exception/CustomException';
 import { sequelize } from '@src/model';
+import * as productRepository from '@src/repository/productRepository';
+import {
+  productListResponse,
+  productDetailResponse,
+  toCommentResponse,
+} from '@src/routes/product/dto/productResponse';
 
 const router = express.Router();
 
@@ -54,23 +60,14 @@ router.get(
       const { offset, limit } = req.query;
       const keyword = req.query.keyword || '';
 
-      const countResponse = await sequelize.query(
-        `SELECT COUNT(*) as total_count FROM product`
-      );
-      const findProducts = await sequelize.query(
-        `SELECT distinct 
-         p.id, p.name, p.price, p.content, p.profile_url, p.place,
-         p.is_sold, p.created_data_time, member.profile_url as sender_profile_url
-         FROM product as p
-         INNER JOIN member
-         ON p.sender_id = member.id
-         WHERE p.name LIKE '%${keyword}%' OR p.content LIKE '%${keyword}%' 
-         ORDER BY created_data_time DESC LIMIT ${limit} OFFSET ${
-          offset * limit
-        }`
+      const countResponse = await productRepository.getCountOfProduct();
+      const findProducts = await productRepository.findProductsPageableByKeword(
+        keyword,
+        limit,
+        offset
       );
       const products = findProducts[0].map((findProduct) => {
-        return _productListResponse(findProduct);
+        return productListResponse(findProduct);
       });
 
       res.status(200).send(
@@ -88,21 +85,6 @@ router.get(
     }
   }
 );
-
-const _productListResponse = (response) => {
-  return {
-    id: response.id,
-    name: response.name,
-    price: response.price,
-    content: response.content,
-    profileUrl: response.profile_url,
-    place: response.place,
-    isSold: response.is_sold,
-    createdDateTime: response.created_data_time,
-    senderProfileUrl: response.sender_profile_url,
-  };
-};
-
 /**
  * 특정 중고 거래 물건을 조회하는 API
  */
@@ -130,7 +112,7 @@ router.get(
       ON c.member_id = m.id 
       WHERE c.product_id=${productResponse[0][0].productId}`);
       const commentResponse = comments[0].map((comment) => {
-        return _toCommentResponse(comment);
+        return toCommentResponse(comment);
       });
       res
         .status(200)
@@ -144,43 +126,6 @@ router.get(
     }
   }
 );
-
-const _toCommentResponse = (comment) => {
-  return {
-    id: comment.commentId,
-    content: comment.content,
-    createdAt: comment.createdAt,
-    updatedAt: comment.updatedAt,
-    commenter: {
-      id: comment.memberId,
-      email: comment.email,
-      name: comment.memberName,
-      profileUrl: comment.memberProfileUrl,
-    },
-  };
-};
-
-const productDetailResponse = (response, comments) => {
-  return {
-    product: {
-      id: response.productId,
-      name: response.productName,
-      price: response.price,
-      content: response.content,
-      profileUrl: response.productProfileUrl,
-      place: response.place,
-      isSold: response.is_sold,
-      createdDateTime: response.created_data_time,
-    },
-    sender: {
-      id: response.memberId,
-      email: response.email,
-      name: response.memberName,
-      profileUrl: response.memberProfileUrl,
-    },
-    comments,
-  };
-};
 
 const _validateExistProduct = (response, productId) => {
   if (response[0].length === 0) {
