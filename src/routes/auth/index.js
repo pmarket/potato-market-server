@@ -13,7 +13,7 @@ router.get(
 router.post(
   '/api/v1/auth/local',
   validateRequestValues('body', ['email', 'password']),
-  authController.googleLocalController
+  authController.localAuthController
 );
 
 export default router;
