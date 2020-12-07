@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import Comment from '@src/model/Comment';
-import db from '@src/config/knex';
+import { sequelize } from '@src/model';
 
 export const saveComment = async (productId, memberId, content) => {
   return await Comment.create({
@@ -36,12 +36,10 @@ export const deleteComment = async (commentId) => {
 };
 
 export const findMemberProfilesInCommentByProductId = async (productId) => {
-  return await db.raw(
-    `SELECT distinct member.id, member.profile_url
+  return await sequelize.query(`
+    SELECT distinct member.id, member.profile_url
     FROM comment 
     INNER JOIN member 
     ON comment.member_id = member.id
-    WHERE comment.product_id = ${productId}
-  `
-  );
+    WHERE comment.product_id = ${productId}`);
 };
