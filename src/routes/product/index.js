@@ -68,23 +68,9 @@ router.get(
           offset * limit
         }`
       );
-      const products = await Promise.all(
-        findProducts[0].map(async (findProduct) => {
-          const responses = await db.raw(
-            `SELECT distinct 
-          member.id, member.profile_url
-          FROM comment 
-          INNER JOIN member 
-          ON comment.member_id = member.id
-          WHERE comment.product_id = ${findProduct.id}
-          `
-          );
-          const memberProfiles = responses[0].map((response) => {
-            return response.profile_url;
-          });
-          return _productListResponse(findProduct, memberProfiles);
-        })
-      );
+      const products = findProducts[0].map((findProduct) => {
+        return _productListResponse(findProduct);
+      });
 
       res.status(200).send(
         new ApiResponse({
@@ -102,7 +88,7 @@ router.get(
   }
 );
 
-const _productListResponse = (response, memberProfiles) => {
+const _productListResponse = (response) => {
   return {
     id: response.id,
     name: response.name,
@@ -113,7 +99,6 @@ const _productListResponse = (response, memberProfiles) => {
     isSold: response.is_sold,
     createdDateTime: response.created_data_time,
     senderProfileUrl: response.sender_profile_url,
-    commenters: memberProfiles,
   };
 };
 

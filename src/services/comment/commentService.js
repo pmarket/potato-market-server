@@ -26,3 +26,12 @@ export const deleteComment = async (commentId, memberId) => {
   }
   commentRepository.deleteComment(comment.id);
 };
+
+export const getCommentersProfile = async (productId) => {
+  const commenters = await commentRepository.findMemberProfilesInCommentByProductId(
+    productId
+  );
+  return commenters[0].map((commenter) => {
+    return commenter.profile_url;
+  });
+};
