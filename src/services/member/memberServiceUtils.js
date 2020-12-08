@@ -13,7 +13,7 @@ export const validateNotExistMember = async (
     provider
   );
   if (findMember != null) {
-    throw new ConflictException(`이미 존재하는 멤버입니다.`, email);
+    throw new ConflictException('이미 존재하는 멤버입니다.', email);
   }
 };
 
