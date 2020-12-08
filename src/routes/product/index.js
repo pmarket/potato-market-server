@@ -5,6 +5,7 @@ import { ApiResponse } from '@src/ApiResponse';
 import { NotFoundException } from '@src/exception/CustomException';
 import { sequelize } from '@src/model';
 import * as productRepository from '@src/repository/productRepository';
+import * as productLikeService from '@src/services/productLike/productLikeService';
 import {
   productListResponse,
   productDetailResponse,
@@ -55,10 +56,12 @@ router.post(
 router.get(
   '/api/v1/product/list',
   validateRequestValues('query', ['limit', 'offset']),
+  validateAuthToken,
   async (req, res, next) => {
     try {
       const { offset, limit } = req.query;
       const keyword = req.query.keyword || '';
+      const { memberId } = req;
 
       const countResponse = await productRepository.getCountOfProduct();
       const findProducts = await productRepository.findProductsPageableByKeword(
@@ -66,9 +69,17 @@ router.get(
         limit,
         offset
       );
-      const products = findProducts[0].map((findProduct) => {
-        return productListResponse(findProduct);
-      });
+      const products = await Promise.all(
+        findProducts[0].map(async (findProduct) => {
+          return productListResponse(
+            findProduct,
+            await productLikeService.checkIsProductLike(
+              findProduct.id,
+              memberId
+            )
+          );
+        })
+      );
 
       res.status(200).send(
         new ApiResponse({

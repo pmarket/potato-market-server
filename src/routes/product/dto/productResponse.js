@@ -1,4 +1,4 @@
-export const productListResponse = (response) => {
+export const productListResponse = (response, isLike) => {
   return {
     id: response.id,
     name: response.name,
@@ -7,6 +7,7 @@ export const productListResponse = (response) => {
     profileUrl: response.profile_url,
     place: response.place,
     isSold: response.is_sold,
+    isLike: isLike,
     createdDateTime: response.created_data_time,
     senderProfileUrl: response.sender_profile_url,
   };

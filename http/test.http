@@ -61,17 +61,12 @@ GET {{baseUrl}}/api/v1/product/list?limit=10&offset=0
 ### 모든 중고 거래 물건을 조회하는 API (검색)
 GET {{baseUrl}}/api/v1/product/list?limit=10&offset=0&keyword=
 
-### 좋아요
+### 좋아요 추가 & 취소 토글
 
-POST {{baseUrl}}/api/v1/product/like
+PUT {{baseUrl}}/api/v1/product/like
 content-type: application/json
 Authorization: Bearer {{token}}
 
 {
  "productId": 12
 }
-
-### 좋아요 취소
-
-DELETE {{baseUrl}}/api/v1/product/like?productId=12
-Authorization: Bearer {{token}}

@@ -23,3 +23,7 @@ export const findProductsPageableByKeword = async (keyword, limit, offset) => {
          LIMIT ${limit} OFFSET ${offset * limit}`
   );
 };
+
+export const findProductById = async (productId) => {
+  return await sequelize.query(`SELECT * FROM product WHERE id = ${productId}`);
+};

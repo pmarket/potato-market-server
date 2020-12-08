@@ -5,18 +5,10 @@ import { validateRequestValues } from '@src/middleware/requestValidator';
 
 const router = express.Router();
 
-router.post(
+router.put(
   '/api/v1/product/like',
   validateRequestValues('body', ['productId']),
   validateAuthToken,
-  productLikeController.addProductLike
+  productLikeController.toggleProductLike
 );
-
-router.delete(
-  '/api/v1/product/like',
-  validateRequestValues('query', ['productId']),
-  validateAuthToken,
-  productLikeController.deleteProductLike
-);
-
 export default router;
