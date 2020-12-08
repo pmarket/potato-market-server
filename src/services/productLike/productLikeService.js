@@ -24,5 +24,5 @@ export const checkIsProductLike = async (productId, memberId) => {
     productId,
     memberId
   );
-  return productLike === null ? false : true;
+  return productLike !== null;
 };

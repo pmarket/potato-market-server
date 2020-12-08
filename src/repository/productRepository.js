@@ -1,5 +1,9 @@
 import { sequelize } from '@src/model';
 
+/**
+ * TODO: Product -> Sequelize Model 추가 및 ORM로 수정
+ */
+
 export const findProductsBySenderId = async (senderId) => {
   return await sequelize.query(
     `SELECT * FROM product WHERE sender_id=${senderId}`
