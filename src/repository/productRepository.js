@@ -23,8 +23,8 @@ export const findProductsPageableByKeword = async (keyword, limit, offset) => {
                 FROM product
                 WHERE name LIKE '%${keyword}%' OR content LIKE '%${keyword}%'
                 ORDER BY id DESC 
-                OFFSET ${offset * limit}
-                LIMIT ${limit}) as temp ON temp.id = p.id
+                LIMIT ${limit}
+                OFFSET ${offset * limit}) as temp ON temp.id = p.id
          INNER JOIN member
          ON p.sender_id = member.id`
   );
