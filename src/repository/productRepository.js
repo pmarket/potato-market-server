@@ -26,7 +26,8 @@ export const findProductsPageableByKeword = async (keyword, limit, offset) => {
                 LIMIT ${limit}
                 OFFSET ${offset * limit}) as temp ON temp.id = p.id
          INNER JOIN member
-         ON p.sender_id = member.id`
+         ON p.sender_id = member.id
+         ORDER BY p.id DESC`
   );
 };
 
@@ -41,7 +42,7 @@ export const findProductsByIds = async (productIds) => {
       FROM product as p
       INNER JOIN member
       ON p.sender_id = member.id
-      ORDER BY p.id DESC
-      WHERE p.id IN (${productIds.join()})`
+      WHERE p.id IN (${productIds.join()})
+      ORDER BY p.id DESC`
   );
 };
