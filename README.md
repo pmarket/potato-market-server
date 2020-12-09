@@ -14,8 +14,6 @@
 
 ## 인프라
 
-### Production
-
 - AWS ECS + Fargate + AWS ECR
 - AWS RDS (MySQL 5.7)
 - Application Load Balancer (ALB)
