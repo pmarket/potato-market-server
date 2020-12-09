@@ -17,6 +17,14 @@ export const findProductLike = async (productId, memberId) => {
   });
 };
 
+export const findProductsByMemberId = async (memberId) => {
+  return await ProductLike.findAll({
+    where: {
+      memberId: { [Op.eq]: memberId },
+    },
+  });
+};
+
 export const deleteProductLike = async (productId, memberId) => {
   return await ProductLike.destroy({
     where: {

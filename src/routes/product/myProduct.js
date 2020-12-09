@@ -10,4 +10,10 @@ router.get(
   myproductController.retrieveMyProduct
 );
 
+router.get(
+  '/api/v1/product/like/my',
+  validateAuthToken,
+  myproductController.retrieveMyLikeproducts
+);
+
 export default router;

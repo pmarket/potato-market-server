@@ -26,3 +26,7 @@ export const checkIsProductLike = async (productId, memberId) => {
   );
   return productLike !== null;
 };
+
+export const retrieveMyLikeProducts = async (memberId) => {
+  return await productLikeRepository.findProductsByMemberId(memberId);
+};

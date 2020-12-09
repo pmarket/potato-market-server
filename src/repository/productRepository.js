@@ -33,3 +33,14 @@ export const findProductsPageableByKeword = async (keyword, limit, offset) => {
 export const findProductById = async (productId) => {
   return await sequelize.query(`SELECT * FROM product WHERE id = ${productId}`);
 };
+
+export const findProductsByIds = async (productIds) => {
+  return await sequelize.query(
+    `SELECT distinct
+      p.id, p.name, p.price, p.content, p.profile_url, p.place, p.is_sold, p.created_data_time, member.profile_url as sender_profile_url
+      FROM product as p
+      INNER JOIN member
+      ON p.sender_id = member.id
+      WHERE p.id IN (${productIds.join()})`
+  );
+};
