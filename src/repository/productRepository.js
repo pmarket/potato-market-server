@@ -41,6 +41,7 @@ export const findProductsByIds = async (productIds) => {
       FROM product as p
       INNER JOIN member
       ON p.sender_id = member.id
+      ORDER BY p.id DESC
       WHERE p.id IN (${productIds.join()})`
   );
 };
