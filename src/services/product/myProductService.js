@@ -29,6 +29,9 @@ const getProductIds = (likes) => {
 export const retrieveMyLikeproducts = async (memberId) => {
   try {
     const likes = await productLikeService.retrieveMyLikeProducts(memberId);
+    if (likes.length === 0) {
+      return [];
+    }
     const likeProdudts = await productRepository.findProductsByIds(
       getProductIds(likes)
     );

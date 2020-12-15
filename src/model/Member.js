@@ -14,7 +14,7 @@ export default class Member extends Model {
         },
         email: {
           field: 'email',
-          type: DataTypes.STRING,
+          type: DataTypes.STRING(50),
           allowNull: false,
           validate: {
             isEmail: true,
@@ -30,7 +30,7 @@ export default class Member extends Model {
         },
         name: {
           field: 'name',
-          type: DataTypes.STRING,
+          type: DataTypes.STRING(50),
           allowNull: false,
         },
         profileUrl: {

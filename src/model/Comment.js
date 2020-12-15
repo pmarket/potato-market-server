@@ -23,7 +23,8 @@ export default class Comment extends Model {
         },
         content: {
           field: 'content',
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT,
+          allowNull: false,
         },
       },
       {
