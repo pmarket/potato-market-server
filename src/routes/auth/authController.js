@@ -11,7 +11,7 @@ export const googleAuthController = async (req, res, next) => {
   }
 };
 
-export const googleLocalController = async (req, res, next) => {
+export const localAuthController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const response = await authService.localAuthService(email, password);

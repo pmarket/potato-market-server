@@ -10,3 +10,13 @@ export const retrieveMyProduct = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const retrieveMyLikeproducts = async (req, res, next) => {
+  const { memberId } = req;
+  try {
+    const myProducts = await myProductService.retrieveMyLikeproducts(memberId);
+    return res.status(200).json(new ApiResponse(myProducts));
+  } catch (error) {
+    return next(error);
+  }
+};

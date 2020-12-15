@@ -20,9 +20,18 @@ export const deleteComment = async (commentId, memberId) => {
   );
   if (comment == null) {
     throw new NotFoundException(
-      `멤버에게 해당하는 댓글을 찾을 수 없습니다`,
+      '멤버에게 해당하는 댓글을 찾을 수 없습니다',
       commentId
     );
   }
   commentRepository.deleteComment(comment.id);
+};
+
+export const getCommentersProfile = async (productId) => {
+  const commenters = await commentRepository.findMemberProfilesInCommentByProductId(
+    productId
+  );
+  return commenters[0].map((commenter) => {
+    return commenter.profile_url;
+  });
 };

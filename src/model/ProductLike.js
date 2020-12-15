@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 
-export default class Comment extends Model {
+export default class ProductLike extends Model {
   static init(sequelize) {
     return super.init(
       {
@@ -21,15 +21,10 @@ export default class Comment extends Model {
           type: DataTypes.BIGINT,
           allowNull: false,
         },
-        content: {
-          field: 'content',
-          type: DataTypes.TEXT,
-          allowNull: false,
-        },
       },
       {
         sequelize,
-        tableName: 'comment',
+        tableName: 'product_like',
         timestamps: true,
       }
     );
